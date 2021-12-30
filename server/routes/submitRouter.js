@@ -6,7 +6,7 @@ const Questions = require('../models/question');
 const submitRouter = express.Router();
 
 var authenticate = require('../authenticate');
-const findques = require('../Controller/Findquesbyid');
+//const findques = require('../Controller/Findquesbyid');
 submitRouter.use(express.json());
 
 
@@ -74,7 +74,6 @@ submitRouter.post("/", authenticate.verifyUser, (req, res) => {
             }
           }
           body.output = `${count} out of ${output.length} test cases passed` 
-
          res.json(body);
 
          
