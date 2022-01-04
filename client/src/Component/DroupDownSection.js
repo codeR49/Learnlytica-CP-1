@@ -51,7 +51,7 @@ const plang = [
 
 
 
-const token = localStorage.getItem('token');
+let token = localStorage.getItem('token');
 //console.log(token);
 const DrpDwnSection = () => {
 
@@ -141,8 +141,8 @@ console.log(v);
   
     return (
      <div>
-        <div className="dropdown">
-        <Dropdown options={plang}  value={selectedvalue} onChange={Drophandlechange} placeholder="Select an option" />
+        <div className="dropdown" style={{marginLeft:"10px"}}>
+        <Dropdown options={plang}  value={selectedvalue} onChange={Drophandlechange} placeholder="Select an option"  />
         </div>
        <br/> <hr />
   <CodeCompiler  onChange={handleEditorChange}/>

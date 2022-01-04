@@ -38,7 +38,7 @@ export default function Login() {
             res => {
                 setloginstatus(res.status);
                 console.log(res.status)
-                const { token } = res.data;
+                let { token } = res.data;
                 localStorage.setItem('token', token);
             }
         ).catch(error => {
@@ -60,8 +60,10 @@ export default function Login() {
 
 
     return (
+        <>
+        <Navbar/>
         <div id="login" style={{display:"flex"}} >
-        {/* <Navbar/> */}
+        
        <div className="container-lgn" >
        <form  >
             <div >
@@ -89,5 +91,6 @@ export default function Login() {
        </div>
 
     </div>
+    </>
     )
 }
