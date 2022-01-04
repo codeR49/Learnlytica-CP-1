@@ -160,28 +160,37 @@ submitRouter.post("/", authenticate.verifyUser,(req, res) => {
   //    .catch((err)=> err);
   //   }, delayInMilliseconds);
 
-   let report = Reports.create(demoReport)
+
+  if (reportOBj) {
+    let report = Reports.create(demoReport)
       .then((rept) => {
        console.log('Report created', rept);
       }, (err) => err)
      .catch((err)=> err);
+  } else {
+    setTimeout(submitRouter.post("/"), 300); // try again in 300 milliseconds
+    
+  }
+
+
+   
     
      //console.log("Enter into report");
-   request(
-     {
-       url: `http://localhost:8080/submit`,
-       method: "POST",
-       form: report,
-       headers: {
-        'Authorization': `${bearerToken}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-     },
-     function (err, httpResponse, body) {
-       console.log(err, body);
-     }
-   );
+  //  request(
+  //    {
+  //      url: `http://localhost:8080/submit`,
+  //      method: "POST",
+  //      form: report,
+  //      headers: {
+  //       'Authorization': `${bearerToken}`,
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json'
+  //     }
+  //    },
+  //    function (err, httpResponse, body) {
+  //      console.log(err, body);
+  //    }
+  //  );
 }); 
 
 // submitRouter.route("/report")
