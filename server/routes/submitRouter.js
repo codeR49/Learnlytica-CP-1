@@ -162,7 +162,7 @@ submitRouter.post("/", authenticate.verifyUser,(req, res) => {
 
 
   if (reportOBj) {
-    let report = Reports.create(demoReport)
+    let report = Reports.create(reportOBj)
       .then((rept) => {
        console.log('Report created', rept);
       }, (err) => err)
