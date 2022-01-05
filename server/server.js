@@ -23,7 +23,8 @@ var questionRouter = require("./routes/questionRouter");
 var compileRouter = require("./routes/compileRouter");
 var profileRouter = require("./routes/profileRouter");
 var reportRouter = require("./routes/reportRouter");
-
+var quizRouter = require("./routes/quizRouter");
+var quizReport = require("./routes/quizSubmitRouter");
 var app = express();
 
 // const allowedOrigins = ['http://127.0.0.1:5500/client/index.html'];
@@ -47,6 +48,8 @@ app.use('/submit', submitRouter);
 app.use('/compile', compileRouter);
 app.use('/myprofile', profileRouter);
 app.use('/myreport', reportRouter);
+app.use('/quiz', quizRouter);
+app.use("/quizresults",quizReport);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

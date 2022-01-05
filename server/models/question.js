@@ -24,6 +24,10 @@ const questionCompilerSchema = new Schema({
         type: String,
         enum: ['Easy', 'Medium', 'Hard'],
         required: true
+    },
+    category: {
+        type: String,
+        required: true
     }
 }, {
     writeConcern: {
