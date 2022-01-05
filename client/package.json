@@ -17,6 +17,7 @@
     "react": "^17.0.2",
     "react-avatar": "^4.0.0",
     "react-bootstrap": "^2.0.4",
+    "react-calendar-heatmap": "^1.8.1",
     "react-data-table-component": "^7.4.6",
     "react-dom": "^17.0.2",
     "react-dropdown": "^1.9.2",
@@ -24,6 +25,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-timer-hook": "^3.0.5",
     "recharts": "^2.1.8",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2"

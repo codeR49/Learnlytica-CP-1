@@ -2,10 +2,21 @@ import React from 'react';
 // import { Card } from 'antd';
 import algo from "../Image/Algorithem.jpg"
 import "./CSS/Card.css"
+import { Link } from 'react-router-dom';
 
 
 
 const data=[
+    {
+        image:"https://attachments.office.net/owa/mayank.singh%40alchemyinfotech.com/service.svc/s/GetAttachmentThumbnail?id=AAMkAGNhNjEyOWY3LTRhY2UtNGRjYi1hOWI4LWVkNmZkYzQ5NDkyOABGAAAAAAAOgJKSESCHTpReFO9hJfI9BwBQqZmfVQrsSZUV5OsGuWIyAAAAAAEMAABQqZmfVQrsSZUV5OsGuWIyAABSAfGFAAABEgAQANoU2%2FWrEu5HnIhQ9VAqd78%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkZBRDY1NDI2MkM2QUYyOTYxQUExRThDQUI3OEZGMUIyNzBFNzA3RTkiLCJ0eXAiOiJKV1QiLCJ4NXQiOiItdFpVSml4cThwWWFvZWpLdDRfeHNuRG5CLWsifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiOWUwZGE1MTEyNTczNDA3Y2FhYjQ5NzE5OWJlMGU1ZjMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEA3NDMyN2Y2OS1kNzEwLTRhMWUtOGQxOC00NDhmMWVjOGJjZjIiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjAyMzA0MDA5MDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCJjNTY5YmI2Ni02ZTRhLTRlNTAtOWRkMi0zZTU5YTYyMTJmMTBcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTEyMjcwODQ0NC0zMTE0NDkzOTg3LTMyMzYyNzQ3NjktMjkxODg5NjdcIn0iLCJuYmYiOjE2NDEzNzM2ODgsImV4cCI6MTY0MTM3NDI4OCwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQDc0MzI3ZjY5LWQ3MTAtNGExZS04ZDE4LTQ0OGYxZWM4YmNmMiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QDc0MzI3ZjY5LWQ3MTAtNGExZS04ZDE4LTQ0OGYxZWM4YmNmMiIsImhhcHAiOiJvd2EifQ.rdR-dfQ92j1N5uYGCkTSALKrQ_jrI7_QQEvwX0q-p7wuWDcfS7qCdBXZLrmE9D7dAfvW7NUKVFtjaB_WfrqGCp4W2FChAUZGM45KQeTOkhgmuZEiv3ZpGxTspFLUoZ6QNBqnV3j8Rq0XgKJ3j37IkZqlnSslF39aTllQvSy5TYLIKmrYqtOjpEN5T7fyHTUBr1qO-uJscbRwkTw-8NWEi5uK_f9M6bpysWIUkSz__D5gYtwIy2b56pDiO6c9sm6JwmTCsyyDguDYa2zZUfHlh1UesuZXpMz00G-dbKMpFvtm8NRVHeBh51UUwDZ5RXt5EOg0GJjWyNv3N-l2hifm8g&X-OWA-CANARY=bF1HiThfvEWwPIy9EiQ1w_BVpEor0NkYRhsUyGK4176t4YU3dso37Ac2lbBijbdQAzRwO6Dc74s.&owa=outlook.office.com&scriptVer=20211206021.07&animation=true",
+        
+        title:"JavaFullStack",
+        background:"#5c3175",
+        to:"/JavaFullStack"
+    
+    },
+    
+    
     {
         image:"https://attachments.office.net/owa/mayank.singh%40alchemyinfotech.com/service.svc/s/GetAttachmentThumbnail?id=AAMkAGNhNjEyOWY3LTRhY2UtNGRjYi1hOWI4LWVkNmZkYzQ5NDkyOABGAAAAAAAOgJKSESCHTpReFO9hJfI9BwBQqZmfVQrsSZUV5OsGuWIyAAAAAAEMAABQqZmfVQrsSZUV5OsGuWIyAABNW4imAAABEgAQAEcPvT%2BrA29OiA0NOQ99Iv8%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkZBRDY1NDI2MkM2QUYyOTYxQUExRThDQUI3OEZGMUIyNzBFNzA3RTkiLCJ0eXAiOiJKV1QiLCJ4NXQiOiItdFpVSml4cThwWWFvZWpLdDRfeHNuRG5CLWsifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiOWUwZGE1MTEyNTczNDA3Y2FhYjQ5NzE5OWJlMGU1ZjMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEA3NDMyN2Y2OS1kNzEwLTRhMWUtOGQxOC00NDhmMWVjOGJjZjIiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjAyMzA0MDA5MDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCJjNTY5YmI2Ni02ZTRhLTRlNTAtOWRkMi0zZTU5YTYyMTJmMTBcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTEyMjcwODQ0NC0zMTE0NDkzOTg3LTMyMzYyNzQ3NjktMjkxODg5NjdcIn0iLCJuYmYiOjE2NDA4Njg4MjEsImV4cCI6MTY0MDg2OTQyMSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQDc0MzI3ZjY5LWQ3MTAtNGExZS04ZDE4LTQ0OGYxZWM4YmNmMiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QDc0MzI3ZjY5LWQ3MTAtNGExZS04ZDE4LTQ0OGYxZWM4YmNmMiIsImhhcHAiOiJvd2EifQ.Q3cIWnc2oynpi_MeG1_DNdNipJbmuC-iVOstZKNNsCUqQokVTeHzPQT29SFToSuqVqsZARHgbrpHFlhG-3R1Axjn4jlQ5DLSCj1mT6WQDZD8SUeAKRj5_cuqLOWsWA8pL40ZzM_zuvgfbsmY45x3l_gRnHZVaiKugGI1VWaR6iyUxOEmNmrOHV0pH-PWpuDS1DcDR2En4SBFiqlvHgQhfq_twjefRnsxF7sjpYjnlEOA1J4bDiFJUuuEeJrkP4mc8moObKycP6VoyjLLIqfGgHLg8CDoaaxqz7sivKyc4H9JF3tbUzrFpf1iyuA87dTEXwZoooL0VMQTrWkq6UAsYQ&X-OWA-CANARY=KUj89HP470WtRzW-JEBqwzBVLMGTy9kYDFv8zICJSA5oN0_XcldcMcwbZgXsUgWVaQ5UKMb9HHo.&owa=outlook.office.com&scriptVer=20211206021.07&animation=true",
     
@@ -30,7 +41,7 @@ const data=[
 
 function CardData() {
     return (
-        <div style={{display:"flex", marginLeft:"100px" , marginTop:"80px"}}>
+        <div style={{display:"flex", marginTop:"10px"}}>
              
       {/* {data.map((item) => (   
            <div>
@@ -46,7 +57,7 @@ function CardData() {
       {data.map((item)=>(
           <div  className='group-114' style={{marginLeft:"40px"}}>
               <div  className='group-111' style={{backgroundColor:item.background}} >
-              <img src={item.image} className='asset-2300x-8'/>
+             <Link to={item.to}> <img src={item.image} className='asset-2300x-8'/></Link>
                   </div>
          <div >
          <h2 className='algorithms'>{item.title}</h2>

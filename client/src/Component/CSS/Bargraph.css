@@ -1,0 +1,7 @@
+.recharts-legend-wrapper{
+    position: absolute;
+    width: 670px;
+    height: auto;
+    left: 5px;
+     /* bottom: 5px;  */
+}
