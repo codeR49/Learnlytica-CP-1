@@ -50,7 +50,7 @@ export default function Login() {
     if (loginstatus === 200) {
         //  message = <h2>Successfully Logged in</h2>
         message = <Switch>
-            <Redirect to="/allquestion" />
+            <Redirect to="/Dashboard" />
         </Switch>
 
         return message;

@@ -38,16 +38,16 @@ useEffect (()=>{
     
       /* <a href={<DrpDwnSection/>}><Table data={data}  /> </a> */
       <div id='tt'>
-        <CardData/>
+        {/* <CardData/> */}
 <div className='parrent' >
 
 <div style={{display:"flex" , alignItems:"center"}}>
-<div style={{marginLeft:"180px", marginTop:"80px", marginBottom:"20px"}}>
+<div style={{ marginBottom:"20px"}}>
  <h3 style={{fontSize:"25px", color:"#030c5b"}}>List Of Questions</h3>
  
  <hr style={{height:"2px", borderWidth:"0px", color:"#030c5b" , backgroundColor:"#030c5b" ,marginLeft:"40px", marginRight:"40px"}}/>
 </div>
-<div className='searchfilter' style={{marginLeft:"60px", marginTop:"80px", marginBottom:"40px"}}>
+<div className='searchfilter' style={{marginLeft:"60px",  marginBottom:"40px"}}>
 <select  style={{backgroundColor:"#F2F3F4" , width:"130px" ,border:"none" , fontSize:"18px", fontWeight:"500",height:"30px"}}>
 <option value="0">List</option>
   {/* <option value="Easy">Easy</option>
@@ -56,7 +56,7 @@ useEffect (()=>{
  
 </select>
 </div>
-<div className='searchfilter' style={{marginLeft:"60px", marginTop:"80px", marginBottom:"40px"}}>
+<div className='searchfilter' style={{marginLeft:"60px",  marginBottom:"40px"}}>
 <select  style={{backgroundColor:"#F2F3F4" , width:"130px" ,border:"none" , fontSize:"18px", fontWeight:"500", height:"30px"}}>
 <option value="0">Status</option>
   <option value="Easy">To Do</option>
@@ -65,7 +65,7 @@ useEffect (()=>{
  
 </select>
 </div>
-<div className='searchfilter' style={{marginLeft:"60px", marginTop:"80px", marginBottom:"40px"}}>
+<div className='searchfilter' style={{marginLeft:"60px",  marginBottom:"40px"}}>
 <select  style={{backgroundColor:"#F2F3F4" , width:"130px" ,border:"none" , fontSize:"18px", fontWeight:"500" ,height:"30px"}}>
 <option value="0">Difficulty</option>
   <option value="Easy">Easy</option>
@@ -74,7 +74,7 @@ useEffect (()=>{
  
 </select>
 </div>
-<div className='searchfilter' style={{marginLeft:"60px", marginTop:"80px", marginBottom:"40px"}}>
+<div className='searchfilter' style={{marginLeft:"60px", marginBottom:"40px"}}>
 
 </div>
 

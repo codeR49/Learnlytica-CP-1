@@ -1,4 +1,5 @@
 import React from 'react'
+import "./CSS/Bargraph.css"
 import { ResponsiveContainer, LineChart, Line,XAxis,YAxis, CartesianGrid, Legend,Tooltip} from 'recharts';
 
 const programingData=[
@@ -62,18 +63,19 @@ const programingData=[
 
 ]
 
+
 function LineBar() {
     return ( 
         <div>
             <ResponsiveContainer width="100%" height="100%" aspect={3}>
-<LineChart data={programingData} width={700} height={320} margin={{top:5, right:10,left:5,bottom:5}}>
+<LineChart data={programingData} width={700} height={320} margin={{top:5, right:10,left:5,bottom:-10}}>
     <CartesianGrid strokeDasharray="3 3"/>
 <XAxis dataKey="name" interval={'preserveStartEnd'} />
 <YAxis  />
 <Tooltip />
 <Legend/>
 <Line type="monotone" dataKey="student" stroke='red' />
-<Line type="" dataKey="Marks" stroke='green' />
+{/* <Line type="" dataKey="Marks" stroke='green' /> */}
 
 </LineChart>
             </ResponsiveContainer>

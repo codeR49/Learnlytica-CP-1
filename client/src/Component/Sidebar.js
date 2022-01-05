@@ -1,16 +1,23 @@
 import React from 'react'
 import "./CSS/Chart.css";
-import { AiOutlineUser } from 'react-icons/ai';
 
+import { AiOutlineUser } from 'react-icons/ai';
+import {MdQuiz} from "react-icons/md"
 import { BsCodeSlash } from 'react-icons/bs';
  import { BsFillBookmarkFill } from 'react-icons/bs';
-import { FiCopy } from 'react-icons/fi';
+import { FiCopy, FiLogOut } from 'react-icons/fi';
 import { FaUserEdit } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 function Sidebar() {
     return (
         <div>
+            <input className='hamburger ' type="checkbox"/>
+            <div className='toggle'>
+                <span className='top_line common'></span>
+                <span className='middle_line common'></span>
+                <span className='bottom_line common'></span>
+            </div>
             <div className='group-118  '  >
 <div  className='rectangle-32'>
 <div className='user'>
@@ -32,15 +39,22 @@ function Sidebar() {
         <Link><h2 >Basic</h2></Link>
     </div>
 </div>
-
 <div style={{display:"flex" , marginLeft:"60px", marginTop:"20px" }}>
+    <div>
+    <BsCodeSlash  style={{fontWeight:"bold", fontSize:"20px"}} />
+    </div>
+    <div style={{fontWeight:"bold", fontSize:"30px", marginLeft:"20px", marginTop:"5px"}}>
+<Link to="/Allquestion"><h2>Problems</h2></Link>
+    </div>
+</div>
+{/* <div style={{display:"flex" , marginLeft:"60px", marginTop:"20px" }}>
     <div>
     <BsCodeSlash  style={{fontWeight:"bold", fontSize:"20px"}} />
     </div>
     <div style={{fontWeight:"bold", fontSize:"30px", marginLeft:"20px", marginTop:"5px"}}>
 <Link><h2>Practice</h2></Link>
     </div>
-</div>
+</div> */}
 <div style={{display:"flex" , marginLeft:"60px", marginTop:"20px" }}>
     <div>
     <BsFillBookmarkFill  style={{fontWeight:"bold", fontSize:"20px"}} />
@@ -73,6 +87,23 @@ function Sidebar() {
     </div>
     <div style={{fontWeight:"bold", fontSize:"30px", marginLeft:"20px", marginTop:"5px" }}>
         <Link><h2>Account Settings</h2></Link>
+    </div>
+</div>
+<div style={{display:"flex" , marginLeft:"60px", marginTop:"20px" }}>
+    <div>
+    <MdQuiz  style={{fontWeight:"bold", fontSize:"20px"}} />
+    </div>
+    <div style={{fontWeight:"bold", fontSize:"30px", marginLeft:"20px", marginTop:"5px" }}>
+        <Link to="/Quiz"><h2>Quiz</h2></Link>
+    </div>
+</div>
+
+<div style={{display:"flex" , marginLeft:"60px", marginTop:"20px" }}>
+    <div>
+    <FiLogOut  style={{fontWeight:"bold", fontSize:"20px"}} />
+    </div>
+    <div style={{fontWeight:"bold", fontSize:"30px", marginLeft:"20px", marginTop:"5px" }}>
+        <Link to="/Login"><h2>Logout</h2></Link>
     </div>
 </div>
 

@@ -68,6 +68,7 @@ function Chart() {
 <div className="group-123 " style={{width:"40%"}}>
 <PichartExample/>
 </div>
+
 </div>
 
        </div>
