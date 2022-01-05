@@ -12,6 +12,49 @@ var authenticate = require('../authenticate');
 
 submitRouter.use(express.json());
 //submitRouter.use(express.urlencoded({ extended: true }));
+
+let testInput = "";
+let testOutput = [];
+let status;
+let evaluation;
+let languageUsed;
+let compileTime;
+let question;
+let user;
+let testcasePassed;
+let reportOBj={};
+let demoReport = {
+  user: '61cc0ef15c9f00cf9e2454ef',
+  question: '61cae1643a71d187904a1970',
+  status: 'Partially Solved',
+  languageUsed: 'C',
+  compileTime: '0 sec',
+  testcasePassed: '50%'
+}
+// let reportJSON;
+// let createReport;
+
+submitRouter.post("/", authenticate.verifyUser, (req, res) => {
+  let usertoken = req.headers.authorization;
+  //console.log(usertoken);
+  let token = usertoken.split(' ');
+  //console.log(token);
+  let decoded = jwt.verify(token[1], process.env.SECRET_KEY);
+  user = decoded._id;
+  //console.log(user);
+  let codeBody = [];
+  req
+    .on("data", chunk => {
+      codeBody.push(chunk);
+    })
+    .on("end", () => {
+      codeBody = Buffer.concat(codeBody).toString();
+      bodyObj = JSON.parse(codeBody);
+      //console.log(bodyObj);
+      let code = bodyObj.code.toString();
+      let language = bodyObj.language.toString();
+      languageUsed = language.toUpperCase();
+
 const Submit= require('../Controller/Submit');
 const { submit } = require('../Controller/Submit');
 
@@ -60,6 +103,7 @@ const { submit } = require('../Controller/Submit');
 //       let code = bodyObj.code.toString();
 //       let language = bodyObj.language.toString();
 //       languageUsed = language.toUpperCase();
+
       
 //       let correctOutput = testOutput//"57";//'120 \n5040 \n';
     
@@ -232,7 +276,7 @@ const { submit } = require('../Controller/Submit');
 // //   .catch((err) => next(err));
 // // })
 
-submitRouter.post('/',authenticate.verifyUser,Submit.submit);
+//submitRouter.post('/',authenticate.verifyUser,Submit.submit);
 
 // submitRouter.route('/:quesId')
 // .get((req,res,next) => {
@@ -250,6 +294,6 @@ submitRouter.post('/',authenticate.verifyUser,Submit.submit);
 //     .catch((err) => next(err));
 // })
 
-submitRouter.get('/:quesId',Submit.getques)
+//submitRouter.get('/:quesId',Submit.getques)
 
 module.exports = submitRouter;

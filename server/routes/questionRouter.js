@@ -42,6 +42,34 @@ questionRouter.route('/')
 
 /* ######################################## */
 
+questionRouter.route('/categoryalgo')
+.get((req,res,next) => {
+    //var regex = new RegExp("Algorithm", 'i'); 
+    Questions.find({category: "Algorithm"})
+    .then((ques) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ques);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+
+/*  ####################################### */
+
+questionRouter.route('/categorydynamic')
+.get((req,res,next) => {
+    //var regex = new RegExp("Algorithm", 'i'); 
+    Questions.find({category: "Dynamic Programming"})
+    .then((ques) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ques);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+
+/*  ####################################### */
+
 questionRouter.route('/:quesId')
 .get((req,res,next) => {
     Questions.findById(req.params.quesId)

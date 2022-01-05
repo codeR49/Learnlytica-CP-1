@@ -4,9 +4,16 @@ const Reports = require('../models/report');
 
 const reportRouter = express.Router();
 
-var authenticate = require('../authenticate');
+//var authenticate = require('../authenticate');
 
 reportRouter.use(express.json());
+
+// let question = "61cae1643a71d187904a1970";
+// let user = "61cc0ef15c9f00cf9e2454ef"
+
+// let problemSolvedEasy = await Reports.aggregate().
+//   match({ user: {_id: user}, question: {_id: question}  }).
+//   group({ name: '$difficulty', value: { $sum: 1 } });
 
 reportRouter.route('/')
 .get((req,res,next) => {
@@ -77,5 +84,34 @@ reportRouter.route('/:respId')
     }, (err) => next(err))
     .catch((err) => next(err));
 });
+
+// reportRouter.get('/solved', function (req, res) {
+//     Reports.aggregate()
+//     .match({ user: {_id: user}, question: {_id: question}  })
+//     .group({ name: '$difficulty', value: { $sum: 1 } }), function (err, solved) {
+//         console.log(err, solved);
+//         // remap the results
+//         var viewcounts = solved.map(function (solve) {
+//             // using ES6 to compute property name
+//             return { [solve.name]: bear.value };
+//         });
+//         console.log(viewcounts);
+//      }
+// });
+
+// reportRouter.route('/solved')
+// .get((req,res,next) => {
+//     let problemSolvedEasy = Reports.aggregate().
+//   match({ user: {_id: user}, question: {_id: question}  }).
+//   group({ name: '$difficulty', value: { $sum: 1 } });
+//     Reports.find({problemSolvedEasy})
+//     .then(() => {
+//         res.statusCode = 200;
+//         res.setHeader('Content-Type', 'application/json');
+//         console.log();
+//         res.json();
+//     }, (err) => next(err))
+//     .catch((err) => next(err));
+// })
 
 module.exports = reportRouter;
