@@ -28,7 +28,7 @@ function App() {
       <Route path="/Dashboard" component={Dashboard}/>
       <Route path="/Quiz" component={Quiz}/>
       <Route path="/JavaFullStack" component={JavaFullStack}/>
-      <Route path="/QuizSubmit" component={QuizSubmit}/>
+      <Route path="/QuizSubmit/:id" component={QuizSubmit}/>
       {/* <Route path="/form" component={form}/> */}
       <Redirect to="/login"/>
       

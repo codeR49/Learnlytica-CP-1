@@ -7,8 +7,6 @@ function JavaFullStack(props) {
 
   const [ state, setState ] = useState([])
   console.log("Rendering with: ", state);
-  let counter=0;
-  let comp;
   
   useEffect(data => {
        const getFromServer = axios.get('http://localhost:8080/quiz/javafullstack')
@@ -72,7 +70,7 @@ function JavaFullStack(props) {
   state && state.map((item, index)=>(
 <tr key={item._id}>
 <td>{index+1}</td>
-    <Link to={'/QuizSubmit/'+item._id}><td>{item.title}</td></Link>
+    <Link to={'/QuizSubmit/'+index}><td>{item.title}</td></Link>
     <td>Hard</td>
     
 </tr>
