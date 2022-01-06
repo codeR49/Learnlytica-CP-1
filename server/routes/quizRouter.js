@@ -42,6 +42,19 @@ quizRouter.route('/')
     .catch((err) => next(err));    
 });
 
+
+quizRouter.route('/javafullstack')
+.get((req,res,next) => {
+    //var regex = new RegExp("Algorithm", 'i'); 
+    Quiz.find({quizName: "Java Full Stack Quiz"})
+    .then((quiz) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(quiz);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+
 quizRouter.route('/:quizId')
 .get((req,res,next) => {
     Quiz.findById(req.params.quizId)
