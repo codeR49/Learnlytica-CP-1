@@ -4,7 +4,7 @@ var request = require("request");
 var jwt = require('jsonwebtoken');
 
 const Questions = require('../models/question');
-const Reports = require('../models/report');
+const Reports = require('../models/quizreport');
 
 const quizReport = express.Router();
 
@@ -24,6 +24,7 @@ let question;
 let user;
 let testcasePassed;
 let reportOBj={};
+let score;
 let demoReport = {
   user: '61cc0ef15c9f00cf9e2454ef',
   question: '61cae1643a71d187904a1970',
@@ -98,6 +99,7 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
           body.output = `${count} out of ${output.length} test cases passed` 
 
           evaluation = (count/output.length) * 100;
+          console.log(evaluation);
           if(evaluation == 100){
             status = "Solved";
           }
@@ -111,13 +113,14 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
          
           //var delayInMilliseconds = 10000; //1 second
 
-            
+          reportOBj.quizID = "61d6a02eb1be8bb03c273efc"  
           reportOBj.user = user;
           reportOBj.question = question;
           reportOBj.status =status;
           reportOBj.languageUsed = languageUsed;
           reportOBj.compileTime = compileTime;
           reportOBj.testcasePassed = testcasePassed;
+          reportOBj.score = evaluation;
           //reportJSON = JSON.stringify(reportOBj);
           console.log(reportOBj);
           // createReport = Reports.create( reportJSON, function (err, rept) {
@@ -132,22 +135,22 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
       );
 
  
-  //     // Reports.create(reportJSON)
-  //     //    .then((rept) => {
-  //     //     console.log('Report created', rept);
-  //     //    }, (err) => err)
-  //     //   .catch((err)=> err);
+    //   // Reports.create(reportJSON)
+    //   //    .then((rept) => {
+    //   //     console.log('Report created', rept);
+    //   //    }, (err) => err)
+    //   //   .catch((err)=> err);
         
-  //   });
-  //   let formData = {
-  //     user: user, 
-  //     question: question,
-  //     status: status,
-  //     languageUsed: languageUsed,
-  //     compileTime: compileTime,
-  //     testcasePassed: testcasePassed 
+    // });
+    // let formData = {
+    //   user: user, 
+    //   question: question,
+    //   status: status,
+    //   languageUsed: languageUsed,
+    //   compileTime: compileTime,
+    //   testcasePassed: testcasePassed 
 
-  
+    // }
   });
   // setTimeout(function() {
   //   //your code to be executed after 10 second
@@ -176,9 +179,9 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
      //console.log("Enter into report");
   //  request(
   //    {
-  //      url: `http://localhost:8080/submit`,
+  //      url: `http://localhost:8080/quizresults`,
   //      method: "POST",
-  //      form: report,
+  //      form: reportOBj,
   //      headers: {
   //       'Authorization': `${bearerToken}`,
   //       'Content-Type': 'application/json',
