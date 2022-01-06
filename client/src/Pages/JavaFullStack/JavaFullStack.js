@@ -3,6 +3,7 @@ import axios from 'axios';
 import Sidebar from "../../Component/Sidebar"
 import { Link } from 'react-router-dom';
 import data from '../../Component/data';
+import Timer from '../../Component/Timer';
 function JavaFullStack(props) {
 
   const [ state, setState ] = useState([])
@@ -40,6 +41,10 @@ function JavaFullStack(props) {
          <Sidebar/>
          </div>
     <div style={{width:"80%"}}>
+    <div className='heading' style={{marginLeft:"600px"}}>
+  {/* <Heading/>   */}
+<Timer/>
+  </div>
     <div style={{marginTop:"20px", width:"80%", height:"190px" , border:"1px solid gray"}}>
 <bold><h2 style={{fontSize:"20px", marginTop:"10px", marginLeft:"20px"}}>Quiz Instruction</h2></bold>
 <table style={{width:"90%" , marginLeft:"20px"}}>
@@ -62,6 +67,7 @@ function JavaFullStack(props) {
 <th></th>
     <th>Title</th>
     <th>Difficulty</th>
+    <th>Start Quiz</th>
     
   </tr>
 </thead>
@@ -72,6 +78,9 @@ function JavaFullStack(props) {
 <td>{index+1}</td>
     <Link to={'/QuizSubmit/'+index}><td>{item.title}</td></Link>
     <td>Hard</td>
+    <td>
+<Link to={'/QuizSubmit/'+index}>
+<button type='button' className='buttonsubmit'  >Solve Now</button></Link> </td>
     
 </tr>
   ))
@@ -80,6 +89,8 @@ function JavaFullStack(props) {
  
 </tbody>
 </table>
+
+<button type='button' className='buttonsubmit' style={{marginLeft:"400px", marginTop:"40px"}} >Submit Quiz</button> 
     </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import "../../Component/CSS/Home.css";
 import { Link } from 'react-router-dom';
 
 import Timer from '../../Component/Timer';
+import { FiSkipBack } from 'react-icons/fi';
 
 
 export default function QuizSubmit(props) {
@@ -54,30 +55,23 @@ export default function QuizSubmit(props) {
   
       //     fetchPostList()
       //   },)
-   function previous()
-    {
-     // setcurrentques(data.data[0].question[index-1].description) 
-    }
-    function next1()
-    { 
-
-    }
+ 
 
       return(
           <div>
-                 <div className='heading' style={{marginLeft:"1200px"}}>
+                 <div className='heading' style={{marginTop:"100px"}}>
   {/* <Heading/>   */}
-<Timer/>
+
   </div>
   <div className='main-div'>
   <div className='question '>
       <h2>Question : {props.match.params.id}</h2>
       <h3>{quesdesc}</h3>
      <div style={{marginTop:"450px"}}>
-     <button type='button'className="buttonsubmit" onClick={previous}>Previous</button> 
-{/*      
-        <Button className="buttonsubmit" text="Submit"/> */}
-        <button type='button' className='buttonsubmit' style={{marginLeft:"400px"}} onClick={next1}>Next</button>
+     <Link to="/JavaFullStack"><button type='button'className="buttonsubmit" style={{width:"100px"}} >
+       <FiSkipBack/>
+       Back to Quiz</button> </Link>
+
      </div>
 
 
@@ -88,8 +82,8 @@ export default function QuizSubmit(props) {
   </div>
       
   <h3>{report}</h3>
-  
-  <button type='button' className='buttonsubmit' style={{marginLeft:"400px", marginTop:"40px",backgroundColor:"blue"}} >Submit Quiz</button>
+{/*   
+  <button type='button' className='buttonsubmit' style={{marginLeft:"400px", marginTop:"40px",backgroundColor:"blue"}} >Submit Quiz</button> */}
   </div>  
           </div>
       )
