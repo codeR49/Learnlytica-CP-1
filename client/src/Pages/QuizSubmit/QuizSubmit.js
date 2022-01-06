@@ -14,9 +14,10 @@ export default function QuizSubmit(props) {
     let report;
       const[quesdesc, setquesdesc]= useState();
       const[quesid,setquesid]=useState();
-      const[currentques,setcurrentques]=useState();
+      const[currentques,setcurrentques]=useState(quesdesc);
       const[data,setdata]=useState(quesdesc);
-   var index = props.match.params.id;
+
+    var index = props.match.params.id;
     
   const [ state, setState ] = useState([])
   console.log("Rendering with: ", state);
@@ -27,11 +28,11 @@ export default function QuizSubmit(props) {
               console.log("RES.DATA LOOKS LIKE THIS:, ", res.data);
               setState(res.data[0].question[index]);
               setquesdesc(res.data[0].question[index].description)
-              setdata(res);
+              setdata(res.data[0].question);
           })
           .catch (err => console.error("YO YOU GOT AN ERROR IN AXIOS ", err))
   
-  },[])
+  },[currentques])
 
 
 
@@ -55,11 +56,11 @@ export default function QuizSubmit(props) {
       //   },)
    function previous()
     {
-      setcurrentques(data.data[0].question[index-1].description) 
+     // setcurrentques(data.data[0].question[index-1].description) 
     }
     function next1()
-    {
-      setcurrentques(data.data[0].question[index+1].description) 
+    { 
+
     }
 
       return(

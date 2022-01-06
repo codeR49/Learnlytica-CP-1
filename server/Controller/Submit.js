@@ -13,7 +13,7 @@ var authenticate = require('../authenticate');
 submitRouter.use(express.json());
 let testInput = "";
 let testOutput = [];
-function submit(req,res){
+async function submit(req,res){
    
     let status;
     let evaluation;
@@ -55,6 +55,8 @@ function submit(req,res){
   
         console.log(inputs);
         
+
+        //ENV Variable
         var program = {
           script: code,
           language: language,
@@ -70,7 +72,7 @@ function submit(req,res){
             method: "POST",
             json: program
           },
-          function (error, response, body) {
+          async function (error, response, body) {
             console.log("error:", error);
             console.log("statusCode:", response && response.statusCode);
             console.log("body:", body);
@@ -103,12 +105,12 @@ function submit(req,res){
             //var delayInMilliseconds = 10000; //1 second
   
               
-            reportOBj.user = user;
-            reportOBj.question = question;
-            reportOBj.status =status;
-            reportOBj.languageUsed = languageUsed;
-            reportOBj.compileTime = compileTime;
-            reportOBj.testcasePassed = testcasePassed;
+            reportOBj.user = await user;
+            reportOBj.question = await question;
+            reportOBj.status = await status;
+            reportOBj.languageUsed = await languageUsed;
+            reportOBj.compileTime = await compileTime;
+            reportOBj.testcasePassed = await testcasePassed;
           
             console.log(reportOBj);
            
