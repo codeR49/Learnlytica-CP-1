@@ -42,9 +42,9 @@ quizRouter.route('/')
     .catch((err) => next(err));    
 });
 
-quizRouter.route('/javafullstack')
+quizRouter.route('/:quizId')
 .get((req,res,next) => {
-    Quiz.find({quizName: "Java Full Stack Quiz"})
+    Quiz.findById(req.params.quizId)
     .then((quiz) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -52,6 +52,31 @@ quizRouter.route('/javafullstack')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
+.post((req, res, next) => {
+    res.statusCode = 403;
+    res.end('POST operation not supported on /quiz'+ req.params.quesId);
+})
+.put((req, res, next) => {
+    Quiz.findByIdAndUpdate(req.params.quizId, {
+        $set: req.body
+    }, { new: true })
+    .then((quiz) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(quiz);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+.delete((req, res, next) => {
+    Quiz.findByIdAndRemove(req.params.quizId)
+    .then((resp) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send("Deleted successfully")
+        res.json(resp);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+});
+
 
 // quizRouter.route("/")
 // .post(quizController.createQuiz);
