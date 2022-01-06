@@ -66,6 +66,7 @@ quizReport.route('/')
       //console.log(bodyObj);
       let code = bodyObj.code.toString();
       let language = bodyObj.language.toString();
+      // let quizID=bodyObj.qid.toString();
       languageUsed = language.toUpperCase();
       
       let correctOutput = testOutput//"57";//'120 \n5040 \n';
@@ -124,7 +125,7 @@ quizReport.route('/')
          
           //var delayInMilliseconds = 10000; //1 second
 
-          reportOBj.quizID = "61d6a02eb1be8bb03c273efc"  
+          reportOBj.quizID = "61d6a02eb1be8bb03c273efc"
           reportOBj.user = user;
           reportOBj.question = question;
           reportOBj.status =status;

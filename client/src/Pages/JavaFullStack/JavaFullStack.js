@@ -75,8 +75,8 @@ function JavaFullStack(props) {
 {
   state && state.map((item, index)=>(
 <tr key={item._id}>
-<td>{index+1}</td>
-    <Link to={'/QuizSubmit/'+index}><td>{item.title}</td></Link>
+<td>{index}</td>
+    <Link to={'/QuizSubmit/'+index+'/'+item._id}><td>{item.title}</td></Link>
     <td>Hard</td>
     <td>
 <Link to={'/QuizSubmit/'+index}>

@@ -14,11 +14,11 @@ export default function QuizSubmit(props) {
     console.log(props);
     let report;
       const[quesdesc, setquesdesc]= useState();
-      const[quesid,setquesid]=useState();
+      const[quizid,setquizid]=useState();
       const[currentques,setcurrentques]=useState(quesdesc);
       const[data,setdata]=useState(quesdesc);
 
-    var index = props.match.params.id;
+    var index = props.match.params.index;
     
   const [ state, setState ] = useState([])
   console.log("Rendering with: ", state);
@@ -27,9 +27,12 @@ export default function QuizSubmit(props) {
        const getFromServer = axios.get('http://localhost:8080/quiz/javafullstack')
           .then(res => {
               console.log("RES.DATA LOOKS LIKE THIS:, ", res.data);
+              console.log(res)
               setState(res.data[0].question[index]);
               setquesdesc(res.data[0].question[index].description)
               setdata(res.data[0].question);
+              setquizid(res.data[0].time)
+              console.log(quizid)
           })
           .catch (err => console.error("YO YOU GOT AN ERROR IN AXIOS ", err))
   
@@ -78,7 +81,7 @@ export default function QuizSubmit(props) {
   </div>
   
   <div className='compiler'   >
-  <DrpDwnSection quesid={quesid}/>
+  <DrpDwnSection quizid={quizid}/>
   </div>
       
   <h3>{report}</h3>

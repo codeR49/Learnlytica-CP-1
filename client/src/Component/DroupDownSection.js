@@ -60,6 +60,7 @@ const DrpDwnSection = () => {
   const [inp, setinp] = useState();
   const [code, setcode] = useState();
   const [output, setoutput] = useState();
+  let quizID;
   // const [submitOutput, setSubmitOutput] = useState();
   var v;
   function handleEditorChange(e) {
@@ -122,7 +123,7 @@ async function apiSubmit(props){
       code: code,
       language: selectedvalue,
       standardIn: inp
-      // qid:props.quesid
+      // quizID:props.quizID
 
     })
   // }) .then(response => {
