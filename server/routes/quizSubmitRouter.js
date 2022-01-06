@@ -6,11 +6,11 @@ var jwt = require('jsonwebtoken');
 const Questions = require('../models/question');
 const Reports = require('../models/report');
 
-const submitRouter = express.Router();
+const quizReport = express.Router();
 
 var authenticate = require('../authenticate');
 
-submitRouter.use(express.json());
+quizReport.use(express.json());
 //submitRouter.use(express.urlencoded({ extended: true }));
 
 
@@ -35,7 +35,7 @@ let demoReport = {
 // let reportJSON;
 // let createReport;
 
-submitRouter.post("/", authenticate.verifyUser, (req, res) => {
+quizReport.post("/", authenticate.verifyUser, (req, res) => {
   let usertoken = req.headers.authorization;
   //console.log(usertoken);
   let token = usertoken.split(' ');
@@ -166,7 +166,7 @@ submitRouter.post("/", authenticate.verifyUser, (req, res) => {
       }, (err) => err)
      .catch((err)=> err);
   } else {
-    setTimeout(submitRouter.post("/"), 300); // try again in 300 milliseconds
+    setTimeout(quizReports.post("/"), 300); // try again in 300 milliseconds
     
   }
 
@@ -206,7 +206,7 @@ submitRouter.post("/", authenticate.verifyUser, (req, res) => {
 //   .catch((err) => next(err));
 // })
 
-submitRouter.route('/:quesId')
+quizReport.route('/:quesId')
 .get((req,res,next) => {
     question = req.params.quesId;
     //console.log(question);
@@ -224,4 +224,4 @@ submitRouter.route('/:quesId')
 
 
 
-module.exports = submitRouter;
+module.exports = quizReport;
