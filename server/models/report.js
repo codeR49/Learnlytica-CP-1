@@ -31,6 +31,10 @@ const reportSchema = new Schema({
     testcasePassed: {
         type: String,
         required: true
+    },
+    score: {
+        type: Number,
+        default: 0
     }
     
 }, {
