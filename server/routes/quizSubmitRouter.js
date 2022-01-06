@@ -36,7 +36,18 @@ let demoReport = {
 // let reportJSON;
 // let createReport;
 
-quizReport.post("/", authenticate.verifyUser, (req, res) => {
+quizReport.route('/')
+.get((req,res,next) => {
+    Reports.find({})
+    .populate('user question')
+    .then((rept) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(rept);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
+.post(authenticate.verifyUser, (req, res) => {
   let usertoken = req.headers.authorization;
   //console.log(usertoken);
   let token = usertoken.split(' ');
@@ -135,22 +146,22 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
       );
 
  
-    //   // Reports.create(reportJSON)
-    //   //    .then((rept) => {
-    //   //     console.log('Report created', rept);
-    //   //    }, (err) => err)
-    //   //   .catch((err)=> err);
+  //     // Reports.create(reportJSON)
+  //     //    .then((rept) => {
+  //     //     console.log('Report created', rept);
+  //     //    }, (err) => err)
+  //     //   .catch((err)=> err);
         
-    // });
-    // let formData = {
-    //   user: user, 
-    //   question: question,
-    //   status: status,
-    //   languageUsed: languageUsed,
-    //   compileTime: compileTime,
-    //   testcasePassed: testcasePassed 
+  //   });
+  //   let formData = {
+  //     user: user, 
+  //     question: question,
+  //     status: status,
+  //     languageUsed: languageUsed,
+  //     compileTime: compileTime,
+  //     testcasePassed: testcasePassed 
 
-    // }
+  
   });
   // setTimeout(function() {
   //   //your code to be executed after 10 second
@@ -179,9 +190,9 @@ quizReport.post("/", authenticate.verifyUser, (req, res) => {
      //console.log("Enter into report");
   //  request(
   //    {
-  //      url: `http://localhost:8080/quizresults`,
+  //      url: `http://localhost:8080/submit`,
   //      method: "POST",
-  //      form: reportOBj,
+  //      form: report,
   //      headers: {
   //       'Authorization': `${bearerToken}`,
   //       'Content-Type': 'application/json',
