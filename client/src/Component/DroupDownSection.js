@@ -53,14 +53,15 @@ const plang = [
 
 let token = localStorage.getItem('token');
 //console.log(token);
-const DrpDwnSection = () => {
+const DrpDwnSection = (props) => {
 
 
   const [selectedvalue, setSelectedvalue] = useState("c");
   const [inp, setinp] = useState();
   const [code, setcode] = useState();
   const [output, setoutput] = useState();
-  let quizID;
+  let quesid=props.quesid;
+  console.log(quesid);
   // const [submitOutput, setSubmitOutput] = useState();
   var v;
   function handleEditorChange(e) {
@@ -98,6 +99,7 @@ function handleChange(e){
         code: code,
         language: selectedvalue,
         standardIn: inp
+        
       })
     // }) .then(response => {
     //   const c = (response.json())
@@ -122,8 +124,8 @@ async function apiSubmit(props){
     body: JSON.stringify({
       code: code,
       language: selectedvalue,
-      standardIn: inp
-      // quizID:props.quizID
+      standardIn: inp,
+      quesid:quesid
 
     })
   // }) .then(response => {

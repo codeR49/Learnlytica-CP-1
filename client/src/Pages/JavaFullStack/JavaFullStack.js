@@ -79,6 +79,8 @@ function JavaFullStack(props) {
     <Link to={'/QuizSubmit/'+index+'/'+item._id}><td>{item.title}</td></Link>
     <td>Hard</td>
     <td>
+
+      
 <Link to={'/QuizSubmit/'+index}>
 <button type='button' className='buttonsubmit'  >Solve Now</button></Link> </td>
     

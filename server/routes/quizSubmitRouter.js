@@ -4,14 +4,13 @@ var request = require("request");
 var jwt = require('jsonwebtoken');
 
 const Questions = require('../models/question');
-const Reports = require('../models/quizreport');
+const Reports = require('../models/report');
 
 const quizReport = express.Router();
 
 var authenticate = require('../authenticate');
 
 quizReport.use(express.json());
-//submitRouter.use(express.urlencoded({ extended: true }));
 
 
 let testInput = "";
@@ -23,7 +22,10 @@ let compileTime;
 let question;
 let user;
 let testcasePassed;
+let inputs;
+let correctOutput;
 let reportOBj={};
+var program;
 let score;
 let demoReport = {
   user: '61cc0ef15c9f00cf9e2454ef',
@@ -49,12 +51,16 @@ quizReport.route('/')
 })
 .post(authenticate.verifyUser, (req, res) => {
   let usertoken = req.headers.authorization;
-  //console.log(usertoken);
+ 
   let token = usertoken.split(' ');
-  //console.log(token);
+
   let decoded = jwt.verify(token[1], process.env.SECRET_KEY);
   user = decoded._id;
-  //console.log(user);
+
+
+
+ 
+ 
   let codeBody = [];
   req
     .on("data", chunk => {
@@ -63,179 +69,119 @@ quizReport.route('/')
     .on("end", () => {
       codeBody = Buffer.concat(codeBody).toString();
       bodyObj = JSON.parse(codeBody);
-      //console.log(bodyObj);
+     
       let code = bodyObj.code.toString();
       let language = bodyObj.language.toString();
-      // let quizID=bodyObj.qid.toString();
+      let quesid=bodyObj.quesid.toString();
       languageUsed = language.toUpperCase();
       
-      let correctOutput = testOutput//"57";//'120 \n5040 \n';
+      //"57";//'120 \n5040 \n';
     
-      console.log(correctOutput);
-
-      let inputs = testInput;//"2 \n 5 \n 7";//bodyObj.standardIn.toString();
-
-      console.log(inputs);
       
-      var program = {
-        script: code,
-        language: language,
-        stdin: inputs,
-        versionIndex: "0",
-        clientId: "1a06c1f835ba9b2ccf218d8fe381182d",
-        clientSecret:
-          "3762082933511c0ad39b8ba3908d45accbefaf946c38dd88161758185dc9dbec"
-      };
-      request(
-        {
-          url: "https://api.jdoodle.com/v1/execute",
-          method: "POST",
-          json: program
-        },
-        function (error, response, body) {
-          console.log("error:", error);
-          console.log("statusCode:", response && response.statusCode);
-          console.log("body:", body);
-          let count = 0;
-          let output = body.output.match(/\d+/g);
-          //console.log(output);
+      //"2 \n 5 \n 7";//bodyObj.standardIn.toString();
+      
 
-          compileTime = Math.floor(Number(body.cpuTime));
-          compileTime = `${compileTime} sec`;
-          //console.log(compileTime)
-          for(let i =0; i<output.length; i++){
-            if(output[i] == correctOutput[i]){
-                count += 1;
-            }
-          }
-          body.output = `${count} out of ${output.length} test cases passed` 
 
-          evaluation = (count/output.length) * 100;
-          console.log(evaluation);
-          if(evaluation == 100){
-            status = "Solved";
-          }
-          else if(evaluation > 0 && evaluation < 100){
-            status = "Partially Solved";
-          }
-          else{
-            status = "Unsolved";
-          }
-          testcasePassed = `${evaluation}%`;
-         
-          //var delayInMilliseconds = 10000; //1 second
 
-          reportOBj.quizID = "61d6a02eb1be8bb03c273efc"
-          reportOBj.user = user;
-          reportOBj.question = question;
-          reportOBj.status =status;
-          reportOBj.languageUsed = languageUsed;
-          reportOBj.compileTime = compileTime;
-          reportOBj.testcasePassed = testcasePassed;
-          reportOBj.score = evaluation;
-          //reportJSON = JSON.stringify(reportOBj);
-          console.log(reportOBj);
-          // createReport = Reports.create( reportJSON, function (err, rept) {
-          //   if (err) return err;
-          //   console.log('Report created', rept);
-          // });
-          
-          
-         res.json(body);
-         
-        } 
-      );
+    
+    
+      setTimeout(() => { 
 
- 
-  //     // Reports.create(reportJSON)
-  //     //    .then((rept) => {
-  //     //     console.log('Report created', rept);
-  //     //    }, (err) => err)
-  //     //   .catch((err)=> err);
+        Questions.findById(quesid)
+        .then((ques) => {
+            testInput = ques.sampleInput;
+            testOutput = ques.sampleOutput;//.map(item => testOutput.push(item));
+            correctOutput = testOutput
+            inputs = testInput;
+            program = {
+              script: code,
+              language: language,
+              stdin: inputs,
+              versionIndex: "0",
+              clientId: "1a06c1f835ba9b2ccf218d8fe381182d",
+              clientSecret:
+                "3762082933511c0ad39b8ba3908d45accbefaf946c38dd88161758185dc9dbec"
+            };
+
+            request(
+              {
+                url: "https://api.jdoodle.com/v1/execute",
+                method: "POST",
+                json: program
+              },
+              function (error, response, body) {
+                console.log("error:", error);
+                console.log("statusCode:", response && response.statusCode);
+                console.log("body:", body);
+                
+                let count = 0;
+                let output =body.output.match(/\d+/g);  
+                let size=output.length;  
+      
+      
+                compileTime = Math.floor(Number(body.cpuTime));
+                compileTime = `${compileTime} sec`;
         
-  //   });
-  //   let formData = {
-  //     user: user, 
-  //     question: question,
-  //     status: status,
-  //     languageUsed: languageUsed,
-  //     compileTime: compileTime,
-  //     testcasePassed: testcasePassed 
+    
+    
+                for(let i =0; i<size; i++){
+                    
+                  if(output[i] == correctOutput[i]){
+                    count += 1;
+                  }
+                }
+                  
+                body.output = `${count} out of ${size} test cases passed` 
+      
+                evaluation = (count/size) * 100;
+                console.log(evaluation);
+                if(evaluation == 100){
+                  status = "Solved";
+                }
+                else if(evaluation > 0 && evaluation < 100){
+                  status = "Partially Solved";
+                }
+                else{
+                  status = "Unsolved";
+                }
+                testcasePassed = `${evaluation}%`;
+               
+                //var delayInMilliseconds = 10000; //1 second
+      
+                reportOBj.quizID = "61d6a02eb1be8bb03c273efc"
+                reportOBj.user = user;
+                reportOBj.question = question;
+                reportOBj.status =status;
+                reportOBj.languageUsed = languageUsed;
+                reportOBj.compileTime = compileTime;
+                reportOBj.testcasePassed = testcasePassed;
+                reportOBj.score = evaluation;
+                //reportJSON = JSON.stringify(reportOBj);
+                Reports.create(reportOBj)
+                console.log(reportOBj);
+                // createReport = Reports.create( reportJSON, function (err, rept) {
+                //   if (err) return err;
+                //   console.log('Report created', rept);
+                // });
+                
+                
+               res.json(body);
+               
+              } 
+            );
+            
+            
+            }, 2000);
+           
+        })
+        
+  
+        
 
   
   });
-  // setTimeout(function() {
-  //   //your code to be executed after 10 second
-  //   let report = Reports.create(reportOBj)
-  //     .then((rept) => {
-  //      console.log('Report created', rept);
-  //     }, (err) => err)
-  //    .catch((err)=> err);
-  //   }, delayInMilliseconds);
 
-
-  if (reportOBj) {
-    let report = Reports.create(reportOBj)
-      .then((rept) => {
-       console.log('Report created', rept);
-      }, (err) => err)
-     .catch((err)=> err);
-  } else {
-    setTimeout(quizReports.post("/"), 300); // try again in 300 milliseconds
-    
-  }
-
-
-   
-    
-     //console.log("Enter into report");
-  //  request(
-  //    {
-  //      url: `http://localhost:8080/submit`,
-  //      method: "POST",
-  //      form: report,
-  //      headers: {
-  //       'Authorization': `${bearerToken}`,
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json'
-  //     }
-  //    },
-  //    function (err, httpResponse, body) {
-  //      console.log(err, body);
-  //    }
-  //  );
 }); 
-
-// submitRouter.route("/report")
-// .post((req,res,next) => {
-  
-//   Questions.findById(question)
-//   .then((ques) => {
-//       res.statusCode = 200;
-//       res.setHeader('Content-Type', 'application/json');
-//       testInput = ques.sampleInput;
-//       testOutput = ques.sampleOutput;//.map(item => testOutput.push(item));
-//       console.log(testOutput);
-//       res.json(ques);
-//   }, (err) => next(err))
-//   .catch((err) => next(err));
-// })
-
-quizReport.route('/:quesId')
-.get((req,res,next) => {
-    question = req.params.quesId;
-    //console.log(question);
-    Questions.findById(question)
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        testInput = ques.sampleInput;
-        testOutput = ques.sampleOutput;//.map(item => testOutput.push(item));
-        console.log(testOutput);
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
 
 
 

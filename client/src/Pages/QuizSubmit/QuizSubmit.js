@@ -17,8 +17,9 @@ export default function QuizSubmit(props) {
       const[quizid,setquizid]=useState();
       const[currentques,setcurrentques]=useState(quesdesc);
       const[data,setdata]=useState(quesdesc);
-
+      const[quesid,setquesid]=useState();
     var index = props.match.params.index;
+    var questionid= props.match.params.id;
     
   const [ state, setState ] = useState([])
   console.log("Rendering with: ", state);
@@ -32,6 +33,7 @@ export default function QuizSubmit(props) {
               setquesdesc(res.data[0].question[index].description)
               setdata(res.data[0].question);
               setquizid(res.data[0].time)
+              setquesid(props.match.params.id)
               console.log(quizid)
           })
           .catch (err => console.error("YO YOU GOT AN ERROR IN AXIOS ", err))
@@ -81,7 +83,7 @@ export default function QuizSubmit(props) {
   </div>
   
   <div className='compiler'   >
-  <DrpDwnSection quizid={quizid}/>
+  <DrpDwnSection quesid={quesid}/>
   </div>
       
   <h3>{report}</h3>

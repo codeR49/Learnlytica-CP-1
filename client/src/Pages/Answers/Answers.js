@@ -12,7 +12,7 @@ export default function Answers(props) {
   let report;
     const[quesdesc, setquesdesc]= useState();
     const[quesid,setquesid]=useState();
-    let url= 'http://localhost:8080/quizresults/'+props.match.params.id;
+    let url= 'http:localhost:8080/submit/'+props.match.params.id;//
 
 
     useEffect (()=>{
