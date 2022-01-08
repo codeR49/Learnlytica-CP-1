@@ -25,6 +25,7 @@ var profileRouter = require("./routes/profileRouter");
 var reportRouter = require("./routes/reportRouter");
 var quizRouter = require("./routes/quizRouter");
 var quizReport = require("./routes/quizSubmitRouter");
+
 var app = express();
 
 // const allowedOrigins = ['http://127.0.0.1:5500/client/index.html'];
@@ -33,7 +34,7 @@ var app = express();
 //   origin: allowedOrigins
 // };
 
- app.use(cors());
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -7,6 +7,7 @@ import Timer from '../../Component/Timer';
 function JavaFullStack(props) {
 
   const [ state, setState ] = useState([])
+  const [ quizid, setquizid ] = useState([])
   console.log("Rendering with: ", state);
   
   useEffect(data => {
@@ -14,6 +15,8 @@ function JavaFullStack(props) {
           .then(res => {
               console.log("RES.DATA LOOKS LIKE THIS:, ", res.data);
               setState(res.data[0].question);
+              setquizid(res.data[0]._id);
+              console.log(quizid)
           })
           .catch (err => console.error("YO YOU GOT AN ERROR IN AXIOS ", err))
   
@@ -76,7 +79,7 @@ function JavaFullStack(props) {
   state && state.map((item, index)=>(
 <tr key={item._id}>
 <td>{index}</td>
-    <Link to={'/QuizSubmit/'+index+'/'+item._id}><td>{item.title}</td></Link>
+    <Link to={'/QuizSubmit/'+index+'/'+quizid+'/'+item._id}><td>{item.title}</td></Link>
     <td>Hard</td>
     <td>
 

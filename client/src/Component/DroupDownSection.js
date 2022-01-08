@@ -61,6 +61,7 @@ const DrpDwnSection = (props) => {
   const [code, setcode] = useState();
   const [output, setoutput] = useState();
   let quesid=props.quesid;
+  let quizid=props.quizid;
   console.log(quesid);
   // const [submitOutput, setSubmitOutput] = useState();
   var v;
@@ -125,7 +126,8 @@ async function apiSubmit(props){
       code: code,
       language: selectedvalue,
       standardIn: inp,
-      quesid:quesid
+      quesid:quesid,
+      quizid:quizid
 
     })
   // }) .then(response => {

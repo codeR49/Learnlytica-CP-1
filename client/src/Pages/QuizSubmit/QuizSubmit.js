@@ -20,7 +20,8 @@ export default function QuizSubmit(props) {
       const[quesid,setquesid]=useState();
     var index = props.match.params.index;
     var questionid= props.match.params.id;
-    
+    var  quiz=props.match.params.quizid
+
   const [ state, setState ] = useState([])
   console.log("Rendering with: ", state);
   
@@ -32,7 +33,7 @@ export default function QuizSubmit(props) {
               setState(res.data[0].question[index]);
               setquesdesc(res.data[0].question[index].description)
               setdata(res.data[0].question);
-              setquizid(res.data[0].time)
+              setquizid(props.match.params.quizid);
               setquesid(props.match.params.id)
               console.log(quizid)
           })
@@ -42,25 +43,6 @@ export default function QuizSubmit(props) {
 
 
 
-      // let url= 'http://localhost:8080/submit/'+props.match.params.id;
-  
-  
-      // useEffect (()=>{
-      //     const fetchPostList = async () =>{
-      //       console.log("API HIT 1")
-      //       const { data } =await axios(url)
-      //       report = data;
-      //       console.log("API HIT 2");
-      //       console.log(report);
-      //       setquesdesc(data.description)
-            
-      //       console.log(data.description)
-  
-      //     }
-  
-      //     fetchPostList()
-      //   },)
- 
 
       return(
           <div>
@@ -83,7 +65,7 @@ export default function QuizSubmit(props) {
   </div>
   
   <div className='compiler'   >
-  <DrpDwnSection quesid={quesid}/>
+  <DrpDwnSection quesid={quesid} quizid={quizid}/>
   </div>
       
   <h3>{report}</h3>
