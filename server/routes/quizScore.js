@@ -4,7 +4,7 @@ var request = require("request");
 var jwt = require('jsonwebtoken');
 
 const Questions = require('../models/question');
-const Reports = require('../models/report');
+const Reports = require('../models/quizreport');
 
 const quizReport = express.Router();
 
@@ -26,7 +26,6 @@ let inputs;
 let correctOutput;
 let reportOBj={};
 var program;
-let score;
 let demoReport = {
   user: '61cc0ef15c9f00cf9e2454ef',
   question: '61cae1643a71d187904a1970',
@@ -134,7 +133,7 @@ quizReport.route('/')
                 }
                   
                 body.output = `${count} out of ${size} test cases passed` 
-      
+                
                 evaluation = (count/size) * 100;
                 console.log(evaluation);
                 if(evaluation == 100){
@@ -158,6 +157,9 @@ quizReport.route('/')
                 reportOBj.compileTime = compileTime;
                 reportOBj.testcasePassed = testcasePassed;
                 reportOBj.score = evaluation;
+
+                body.score = evaluation;
+                console.log(body.score);
                 //reportJSON = JSON.stringify(reportOBj);
                 Reports.create(reportOBj)
                 console.log(reportOBj);
@@ -185,6 +187,27 @@ quizReport.route('/')
 
 }); 
 
+
+quizReport.route('/getavgscore')
+.get((req,res,next) => {
+    Reports.find({user: "61cbfe853b2b0ca8d9300b3b", quizID: "61d6a02eb1be8bb03c273efc"})
+    //.countDocuments({})
+    .populate('question quizID')
+    .then((getScore) => {
+        let avgscore=0;
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        //console.log(score);
+        for(let i =0; i<getScore.length;i++){
+          //console.log(getScore[i]["score"]);
+          avgscore += getScore[i]["score"];
+          console.log(avgscore);
+        }
+        getScore.avgscore = `${avgscore}/${getScore.length * 100}`
+        res.json({"Avg Score": getScore.avgscore});
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
 
 
 module.exports = quizReport;

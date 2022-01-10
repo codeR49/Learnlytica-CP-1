@@ -24,7 +24,7 @@ var compileRouter = require("./routes/compileRouter");
 var profileRouter = require("./routes/profileRouter");
 var reportRouter = require("./routes/reportRouter");
 var quizRouter = require("./routes/quizRouter");
-var quizReport = require("./routes/quizSubmitRouter");
+var quizReport = require("./routes/quizScore");
 
 var app = express();
 
