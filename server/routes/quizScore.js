@@ -26,14 +26,18 @@ let inputs;
 let correctOutput;
 let reportOBj={};
 var program;
-let demoReport = {
-  user: '61cc0ef15c9f00cf9e2454ef',
-  question: '61cae1643a71d187904a1970',
-  status: 'Partially Solved',
-  languageUsed: 'C',
-  compileTime: '0 sec',
-  testcasePassed: '50%'
-}
+let leaderboard = {
+  
+  //users: {} 
+};
+// let demoReport = {
+//   user: '61cc0ef15c9f00cf9e2454ef',
+//   question: '61cae1643a71d187904a1970',
+//   status: 'Partially Solved',
+//   languageUsed: 'C',
+//   compileTime: '0 sec',
+//   testcasePassed: '50%'
+// }
 // let reportJSON;
 // let createReport;
 
@@ -188,11 +192,17 @@ quizReport.route('/')
 }); 
 
 
-quizReport.route('/getavgscore')
-.get((req,res,next) => {
-    Reports.find({user: "61cbfe853b2b0ca8d9300b3b", quizID: "61d6a02eb1be8bb03c273efc"})
+quizReport.route('/getscore')
+.get(authenticate.verifyUser, (req,res,next) => {
+  let usertoken = req.headers.authorization;
+ 
+  let token = usertoken.split(' ');
+
+  let decoded = jwt.verify(token[1], process.env.SECRET_KEY);
+  let userid = decoded._id;
+    Reports.find({user: userid, quizID: "61d6a02eb1be8bb03c273efc"})
     //.countDocuments({})
-    .populate('question quizID')
+    // .populate('question quizID')
     .then((getScore) => {
         let avgscore=0;
         res.statusCode = 200;
@@ -203,11 +213,60 @@ quizReport.route('/getavgscore')
           avgscore += getScore[i]["score"];
           console.log(avgscore);
         }
-        getScore.avgscore = `${avgscore}/${getScore.length * 100}`
-        res.json({"Avg Score": getScore.avgscore});
+        //getScore.avgscore = avgscore;
+        res.json({"Avg Score": avgscore});
     }, (err) => next(err))
     .catch((err) => next(err));
 })
 
+quizReport.route('/javaleaderboard')
+.get((req,res,next) => {
+  
+    Reports.find({quizID: "61d6a02eb1be8bb03c273efc"})
+    //.countDocuments({})
+    .populate('user question')
+    .then((lead) => {
+        
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        //console.log(score);
+
+        /* loop for no of users in this quiz */
+        for(let i =0; i<lead.length;i++){
+          let currentUser = lead[i].user.username
+          // let count = 1;
+          // if(!(leaderboard["users"].hasOwnProperty("name"))){
+          //   leaderboard["users"]["name"] = currentUser
+            
+          // }
+          // if(!(leaderboard["users"].hasOwnProperty("score"))){
+          //   leaderboard["users"]["score"] = lead[i]["score"];
+          // }
+          // if(!(leaderboard["users"].hasOwnProperty(`Q${count}`))){
+            
+          //   leaderboard["users"][`Q${count}`] = lead[i]["score"];
+          // }
+          /*if user not found in leaderboard object add it else start adding their scores */
+          if(!(leaderboard.hasOwnProperty(currentUser))){
+            
+            leaderboard[currentUser] = lead[i]["score"];
+            
+            
+          }
+          else if(leaderboard.hasOwnProperty(currentUser)){
+            leaderboard[currentUser] += lead[i]["score"];
+          }
+           
+        }
+        /* For sorting, converting obj to array*/
+        let entries = Object.entries(leaderboard);
+        /* Sorting from high to low*/
+        let sortAvgScore = entries.sort((a, b) => b[1] - a[1]);
+        console.log(leaderboard);
+        //getScore.avgscore = avgscore;
+        res.json(sortAvgScore);
+    }, (err) => next(err))
+    .catch((err) => next(err));
+})
 
 module.exports = quizReport;
