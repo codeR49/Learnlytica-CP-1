@@ -26,10 +26,7 @@ let inputs;
 let correctOutput;
 let reportOBj={};
 var program;
-let leaderboard = {
-  
-  //users: {} 
-};
+
 // let demoReport = {
 //   user: '61cc0ef15c9f00cf9e2454ef',
 //   question: '61cae1643a71d187904a1970',
@@ -182,11 +179,7 @@ quizReport.route('/')
             }, 2000);
            
         })
-        
-  
-        
-
-  
+   
   });
 
 }); 
@@ -229,40 +222,52 @@ quizReport.route('/javaleaderboard')
         
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        //console.log(score);
+        
 
         /* loop for no of users in this quiz */
+        let leaderboard = {};
         for(let i =0; i<lead.length;i++){
           let currentUser = lead[i].user.username
-          // let count = 1;
-          // if(!(leaderboard["users"].hasOwnProperty("name"))){
-          //   leaderboard["users"]["name"] = currentUser
-            
-          // }
-          // if(!(leaderboard["users"].hasOwnProperty("score"))){
-          //   leaderboard["users"]["score"] = lead[i]["score"];
-          // }
-          // if(!(leaderboard["users"].hasOwnProperty(`Q${count}`))){
-            
-          //   leaderboard["users"][`Q${count}`] = lead[i]["score"];
-          // }
-          /*if user not found in leaderboard object add it else start adding their scores */
+      
           if(!(leaderboard.hasOwnProperty(currentUser))){
             
-            leaderboard[currentUser] = lead[i]["score"];
-            
+            leaderboard[currentUser] = {
+              "totalScore": lead[i]["score"],
+              "Q1": lead[i]["score"]
+            }
             
           }
-          else if(leaderboard.hasOwnProperty(currentUser)){
-            leaderboard[currentUser] += lead[i]["score"];
+          else{
+    
+            leaderboard[currentUser][`Q${i+1}`] = lead[i]["score"];
+            leaderboard[currentUser]["totalScore"] += lead[i]["score"];
           }
-           
         }
+
+           
+        // let obj = {
+        //   'bro@bro.in': { totalScore: 150, Q1: 50, Q2: 50 },
+        //   alchemy: { totalScore: 250, Q1: 50 },
+        //   hero: { totalScore: 300, Q1: 50 },
+        //   bro: { totalScore: 280, Q1: 50 },
+        //   go: { totalScore: 100, Q1: 50 }
+        // }
+
         /* For sorting, converting obj to array*/
-        let entries = Object.entries(leaderboard);
+         let entries = Object.entries(leaderboard);
+         
         /* Sorting from high to low*/
-        let sortAvgScore = entries.sort((a, b) => b[1] - a[1]);
-        console.log(leaderboard);
+     
+        let sortAvgScore =  entries.sort((a, b) => {
+        
+          return b[1].totalScore - a[1].totalScore
+        })
+        for(let i=0;i<sortAvgScore.length;i++){
+          sortAvgScore[i].push({
+            "Rank": i+1
+          })
+        }
+        //console.log(sortAvgScore);
         //getScore.avgscore = avgscore;
         res.json(sortAvgScore);
     }, (err) => next(err))
