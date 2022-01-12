@@ -85,7 +85,7 @@ questionRouter.route('/:quesId')
     res.end('POST operation not supported on /questions'+ req.params.quesId);
 })
 .put((req, res, next) => {
-    Questions.findByIdAndUpdate(req.params.quesId, {
+    Questions.findByIdAndUpdate(req.params.quesId, {    
         $set: req.body
     }, { new: true })
     .then((ques) => {
