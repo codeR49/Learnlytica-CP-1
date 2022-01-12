@@ -142,19 +142,7 @@ quizReport.route('/')
                   
                   let attempt=0;
                 
-                  // Reports.find({user: user, question: question, quizID: quizid})
-                  // .then((res)=>{
-                    
-                  //   if(res)
-                  //   {
-                  //   console.log(res);
-                  //   let dbscore=res.score;
-                  //   if(dbscore>evaluation)
-                  //   evaluation=dbscore;
-                  //   attempt=1;
-                  //   }
-
-                  // })
+                 
 
                   console.log(evaluation);
                   if (evaluation == 100) {
@@ -183,14 +171,46 @@ quizReport.route('/')
                   console.log(body.score);
                   //reportJSON = JSON.stringify(reportOBj);
                     
-                  Reports.create(reportOBj)
-                  // if(attempt=0)
+                 // Reports.create(reportOBj)
+
+                 Reports.find({user: user, question: question, quizID: quizid})
+                 .then((res)=>{
+                   
+                   if(res.length > 0)
+                   {
+                   console.log("find 1 func");
+                   console.log(res);
+                   let dbscore=res.score;
+                   if(dbscore>evaluation)
+                   reportOBj.score=dbscore;
+                   Reports.findByIdAndUpdate({user: user, question: question, quizID: quizid}, {
+                    $set: {'score': reportOBj.score}
+                }, { new: true })
+                
+                console.log("Updated");
+                 
+                   }
+                   else
+                   {
+                    Reports.create(reportOBj)
+                    console.log("Created");
+                   }
+               
+
+                 })
+
+
+
+
+
+
+                  // if(attempt==0)
                   // {
                   // Reports.create(reportOBj)
                   // console.log("Created");
                   // }
                   // else{
-                  //   Reports.findByIdAndUpdate({question: question, quizID: quizid}, {
+                  //   Reports.findByIdAndUpdate({question: question}, {
                   //     $set: {score: evaluation}
                   // }, { new: true })
                   // .then((ques) => {
