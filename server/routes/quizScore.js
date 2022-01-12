@@ -136,6 +136,12 @@ quizReport.route('/')
                 body.output = `${count} out of ${size} test cases passed` 
                 
                 evaluation = (count/size) * 100;
+
+                Reports.find({user: user, question: question, quizID: quizid})
+                .then((res)=>{
+                  console.log(res);
+                  // res.json(res);
+                })
                 console.log(evaluation);
                 if(evaluation == 100){
                   status = "Solved";
@@ -273,5 +279,19 @@ quizReport.route('/javaleaderboard')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
+
+// quizReport.route('/updateScore')
+// .put(authenticate.verifyUser, (req, res, next) => {
+
+//   Reports.findByIdAndUpdate(req.params.quesId, {
+//     $set: req.body
+//   }, { new: true })
+//   .then((ques) => {
+//     res.statusCode = 200;
+//     res.setHeader('Content-Type', 'application/json');
+//     res.json(ques);
+//   }, (err) => next(err))
+//   .catch((err) => next(err));
+// })
 
 module.exports = quizReport;
