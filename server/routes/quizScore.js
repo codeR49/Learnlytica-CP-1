@@ -5,10 +5,12 @@ var jwt = require('jsonwebtoken');
 
 const Questions = require('../models/question');
 const Reports = require('../models/quizreport');
+const Attempt = require('../models/attempt');
 
 const quizReport = express.Router();
 
 var authenticate = require('../authenticate');
+
 
 quizReport.use(express.json());
 
@@ -268,6 +270,16 @@ quizReport.route('/getscore')
         res.json({ "Avg Score": avgscore });
       }, (err) => next(err))
       .catch((err) => next(err));
+      let b={
+        quizID:"61d6a02eb1be8bb03c273efc",
+        userID:userid,
+        attemptFlag:true,
+        attemptAllowed:3
+      }
+      Attempt.create(b).then((d)=>{
+        console.log("attempted")
+      })
+
   })
 
 quizReport.route('/javaleaderboard')

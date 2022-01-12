@@ -55,14 +55,14 @@ attemptRouter.get('/userAttempt/:quizId', authenticate.verifyUser, (req,res,next
 
      let decoded = jwt.verify(token[1], process.env.SECRET_KEY);
      let userid = decoded._id;
+     console.log(userid)
     
     Attempts.find({quizID:req.params.quizId, userID: userid})
     .then((attm) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(attm);
-    }, (err) => next(err))
-    .catch((err) => next(err));
+    })
 })
 
 module.exports = attemptRouter;

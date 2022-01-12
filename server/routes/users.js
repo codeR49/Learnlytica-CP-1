@@ -42,7 +42,6 @@ userRouter.post('/signup', (req, res, next) => {
 });
 
 userRouter.post('/login', passport.authenticate('local'), (req, res) => {
-
   var token = authenticate.getToken({_id: req.user._id});
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
@@ -53,12 +52,11 @@ userRouter.get('/logout', (req, res) => {
   if (req.session) {
     req.session.destroy();
     res.clearCookie('session-id');
-    res.redirect('/');
+    res.redirect('http://localhost:3000/');
   }
   else {
     var err = new Error('You are not logged in!');
     err.status = 403;
-    next(err);
   }
 });
 
