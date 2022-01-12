@@ -181,7 +181,7 @@ quizReport.route('/')
                    console.log("find 1 func");
                    console.log(res);
                    let dbscore=res.score;
-                   if(dbscore>evaluation)
+                   if(dbscore>evaluation){
                    reportOBj.score=dbscore;
                    Reports.findByIdAndUpdate({user: user, question: question, quizID: quizid}, {
                     $set: {'score': reportOBj.score}
@@ -189,7 +189,8 @@ quizReport.route('/')
                 
                 console.log("Updated");
                  
-                   }
+                    }
+                  } 
                    else
                    {
                     Reports.create(reportOBj)
