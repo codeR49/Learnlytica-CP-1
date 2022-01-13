@@ -25,7 +25,7 @@ compileRouter.post("/", authenticate.verifyUser, (req, res) => {
         if(bodyObj.standardIn){
           inputs = bodyObj.standardIn.toString();
         }
-        //let inputs = bodyObj.standardIn.toString();
+       
         console.log("Enter into function2");
         var program = {
           script: code,
@@ -35,11 +35,9 @@ compileRouter.post("/", authenticate.verifyUser, (req, res) => {
           clientId: "1a06c1f835ba9b2ccf218d8fe381182d",
           clientSecret:
             "3762082933511c0ad39b8ba3908d45accbefaf946c38dd88161758185dc9dbec"
-          // headers: {
-          //     'Authorization': `Bearer ${authenticate.getToken}`
-          // }
+         
         };
-        //console.log(usersRouter.getToken);
+       
         request(
           { 
             url: "https://api.jdoodle.com/v1/execute",   
