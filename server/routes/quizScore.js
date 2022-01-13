@@ -267,7 +267,7 @@ quizReport.route('/getscore')
           console.log(avgscore);
         }
         //getScore.avgscore = avgscore;
-        res.json({ "Avg Score": avgscore });
+        res.json({ "AvgScore": avgscore });
       }, (err) => next(err))
       .catch((err) => next(err));
       let b={
@@ -276,8 +276,36 @@ quizReport.route('/getscore')
         attemptFlag:true,
         attemptAllowed:3
       }
-      Attempt.create(b).then((d)=>{
-        console.log("attempted")
+
+      
+
+      Attempt.find({userID:userid , quizID: "61d6a02eb1be8bb03c273efc"})
+      .then((res)=>{
+        
+        if(res.length > 0)
+        {
+        console.log("find 1 func");
+        console.log(res);
+        console.log(res[0].attemptAllowed)
+        let remaining=res[0].attemptAllowed
+        if(remaining>0){
+          remaining=remaining-1;
+          console.log(remaining)
+        Attempt.updateOne({userID:userid , quizID: "61d6a02eb1be8bb03c273efc"}, {
+         $set: {'attemptAllowed':remaining}
+     }, { new: true }).then(console.log("sachin"))
+     
+     console.log("Updated");
+      
+         }
+       } 
+        else
+        {
+          Attempt.create(b)
+         console.log("Attempted");
+        }
+    
+
       })
 
   })
