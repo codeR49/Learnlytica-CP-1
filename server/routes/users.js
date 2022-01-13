@@ -24,7 +24,7 @@ userRouter.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res
 
 userRouter.post('/signup', (req, res, next) => {
   Users.register(new Users({username: req.body.username, 
-    name: req.body.name}),
+    name: req.body.name, email: req.body.email}),
     req.body.password, (err, user) => {
     if(err) {
       res.statusCode = 500;
@@ -45,7 +45,8 @@ userRouter.post('/login', passport.authenticate('local'), (req, res) => {
   var token = authenticate.getToken({_id: req.user._id, 
                                     name: req.user.name, 
                                     admin:req.user.admin,
-                                    username:req.user.username});
+                                    username:req.user.username,
+                                    email:req.user.email});
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.json({success: true, token: token, status: 'You are successfully logged in!'});
