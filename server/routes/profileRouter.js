@@ -1,18 +1,9 @@
 const express = require('express');
-
 const profileRouter = express.Router();
-
-var authenticate = require('../authenticate');
-
+const authenticate = require('../middlewares/authenticate');
+const profileController = require("../controllers/profileController");
 profileRouter.use(express.json());
 
-profileRouter.route('/')
-.get(authenticate.verifyUser, (req,res) => {
-    //console.log(req.user);
-
-    // sending the user data
-    res.send(req.user);
-})
-
+profileRouter.get('/', authenticate.verifyUser, profileController.displayProfile);
 
 module.exports = profileRouter;

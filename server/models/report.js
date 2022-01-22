@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const reportSchema = new Schema({
-    user:  {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -26,7 +25,7 @@ const reportSchema = new Schema({
     },
     timeSpent: {
         type: String,
-        default:''
+        default: ''
     },
     testcasePassed: {
         type: String,
@@ -36,17 +35,14 @@ const reportSchema = new Schema({
         type: Number,
         default: 0
     }
-    
 }, {
     writeConcern: {
-       w: 'majority',
-       j: true,
-       wtimeout: 1000
+        w: 'majority',
+        j: true,
+        wtimeout: 1000
     }
- },{
-    timestamps: true
 })
 
-var  UserReport = mongoose.model('Report', reportSchema);
+var UserReport = mongoose.model('Report', reportSchema);
 
-module.exports =  UserReport;
+module.exports = UserReport;

@@ -4,28 +4,26 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var userSchema = new Schema({
-
     name: {
         type: String,
-        required: true 
+        required: true
     },
     email: {
         type: String,
         required: true,
         unique: true
     },
-    admin:   {
+    admin: {
         type: Boolean,
         default: false
     }
-    
 }, {
     writeConcern: {
-       w: 'majority',
-       j: true,
-       wtimeout: 1000
+        w: 'majority',
+        j: true,
+        wtimeout: 1000
     }
- }, {
+}, {
     timestamps: true
 });
 

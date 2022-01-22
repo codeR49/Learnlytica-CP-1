@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const reportQuizSchema = new Schema({
-    user:  {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -11,7 +10,7 @@ const reportQuizSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question'
     },
-    quizID:{
+    quizID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Quiz'
     },
@@ -39,17 +38,16 @@ const reportQuizSchema = new Schema({
         type: Number,
         default: 0
     }
-    
 }, {
     writeConcern: {
-       w: 'majority',
-       j: true,
-       wtimeout: 1000
+        w: 'majority',
+        j: true,
+        wtimeout: 1000
     }
- },{
+}, {
     timestamps: true
 })
 
-var  QuizReport = mongoose.model('Quizreport', reportQuizSchema);
+var QuizReport = mongoose.model('Quizreport', reportQuizSchema);
 
-module.exports =  QuizReport;
+module.exports = QuizReport;

@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const attemptSchema = new Schema({
-    quizID:{
+    quizID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Quiz'
     },
@@ -24,12 +23,12 @@ const attemptSchema = new Schema({
     }
 }, {
     writeConcern: {
-       w: 'majority',
-       j: true,
-       wtimeout: 1000
+        w: 'majority',
+        j: true,
+        wtimeout: 1000
     }
- })
+})
 
-var  Attempt = mongoose.model('Attempt', attemptSchema);
+let Attempt = mongoose.model('Attempt', attemptSchema);
 
 module.exports = Attempt;

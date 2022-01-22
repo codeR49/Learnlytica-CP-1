@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const questionCompilerSchema = new Schema({
@@ -31,15 +30,15 @@ const questionCompilerSchema = new Schema({
     }
 }, {
     writeConcern: {
-       w: 'majority',
-       j: true,
-       wtimeout: 1000
+        w: 'majority',
+        j: true,
+        wtimeout: 1000
     }
- },{
-      timestamps: true
-    
+}, {
+    timestamps: true
+
 })
 
-var  CompileQuestions = mongoose.model('Question', questionCompilerSchema);
+var CompileQuestions = mongoose.model('Question', questionCompilerSchema);
 
 module.exports = CompileQuestions;

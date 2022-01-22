@@ -1,109 +1,25 @@
 const express = require('express');
-
-const Questions = require('../models/question');
-
-const questionRouter = express.Router();
-
+const questionRouter = express.Router()
+const questionController = require("../controllers/questionController");
 questionRouter.use(express.json());
 
 questionRouter.route('/')
-.get((req,res,next) => {
-    Questions.find({})
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.post((req,res,next) => {
-    Questions.create(req.body)
-    .then((ques) => {
-        console.log('Question created', ques);
-        res.statusCode = 200;
-        res.setHeader('Content-type', 'application/json');
-        res.json(ques)
-    }, (err) => next(err))
-   .catch((err)=> next(err))
-})
-.put((req, res, next) => {
-    res.statusCode =403;
-    res.end('PUT operation not supported on /questions');
-})
-.delete((req, res, next) => {
-    Questions.remove({})
-    .then((enroll) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(enroll);
-    }, (err) => next(err))
-    .catch((err) => next(err));    
-});
+    .get(questionController.getAllQuestions) //route for all questions
+    .post(questionController.createQuestion) //route to create new question
+    .delete(questionController.deleteAllQuestions); //route to delete all questions
 
-/* ######################################## */
-
+/* routes to get algo category questions */
 questionRouter.route('/categoryalgo')
-.get((req,res,next) => {
-    //var regex = new RegExp("Algorithm", 'i'); 
-    Questions.find({category: "Algorithm"})
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
+    .get(questionController.getAlgoQuestions)
 
-/*  ####################################### */
-
+/* routes to get dynamic category questions */
 questionRouter.route('/categorydynamic')
-.get((req,res,next) => {
-    //var regex = new RegExp("Algorithm", 'i'); 
-    Questions.find({category: "Dynamic Programming"})
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-
-/*  ####################################### */
+    .get(questionController.getDynamicQuestions)
 
 questionRouter.route('/:quesId')
-.get((req,res,next) => {
-    Questions.findById(req.params.quesId)
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.post((req, res, next) => {
-    res.statusCode = 403;
-    res.end('POST operation not supported on /questions'+ req.params.quesId);
-})
-.put((req, res, next) => {
-    Questions.findByIdAndUpdate(req.params.quesId, {    
-        $set: req.body
-    }, { new: true })
-    .then((ques) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(ques);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.delete((req, res, next) => {
-    Questions.findByIdAndRemove(req.params.quesId)
-    .then((resp) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send("Deleted successfully")
-        res.json(resp);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-});
+    .get(questionController.getQuestionById)// get question with this id
+    .put(questionController.updateQuestionById)//update question with this id
+    .delete(questionController.deleteQuestionById);//delete question with this id
 
 
 module.exports = questionRouter;

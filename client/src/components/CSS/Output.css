@@ -1,0 +1,50 @@
+.fakeScreen {
+  background-color: #151515;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 2.4rem 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.line1 {
+  color: #9cd9f0;
+  -webkit-animation: type 0.5s 1s steps(20, end) forwards;
+  -moz-animation: type 0.5s 1s steps(20, end) forwards;
+  -o-animation: type 0.5s 1s steps(20, end) forwards;
+  animation: type 0.5s 1s steps(20, end) forwards;
+}
+
+.line4 {
+  color: #fff;
+  -webkit-animation: type 0.5s 10.75s steps(20, end) forwards;
+  -moz-animation: type 0.5s 10.75s steps(20, end) forwards;
+  -o-animation: type 0.5s 10.75s steps(20, end) forwards;
+  animation: type 0.5s 10.75s steps(20, end) forwards;
+}
+
+.title-input {
+  width: 100%;
+  font-family: "Courier New", Courier, monospace;
+  background-color: #e6e6e6;
+  font-size: 1.0rem;
+  font-weight: 300;
+  margin: 2.0rem 0;
+  padding: 0.8rem;
+  border-color: solid royalblue;
+  border-radius: 5px;
+  outline: none;
+}
+
+.title-input:focus {
+  resize: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.cursor1 {
+  -webkit-animation: blink 1s 2s 2 forwards;
+  -moz-animation: blink 1s 2s 2 forwards;
+  -o-animation: blink 1s 2s 2 forwards;
+  animation: blink 1s 2s 2 forwards;
+}
