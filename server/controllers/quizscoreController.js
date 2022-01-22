@@ -15,7 +15,6 @@ let question;
 let user;
 let testcasePassed;
 let inputs;
-let correctOutput;
 let reportOBj = {};
 var program;
 
@@ -82,7 +81,7 @@ const createQuizReport = (authenticate.verifyUser, (req, res) => {
                 compileTime = Math.floor(Number(body.cpuTime));
                 compileTime = `${compileTime} sec`;
                 for (let i = 0; i < size; i++) {
-                  if (output[i] == correctOutput[i]) {
+                  if (output[i] == testOutput[i]) {
                     count += 1;
                   }
                 }
