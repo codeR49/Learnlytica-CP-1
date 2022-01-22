@@ -1,10 +1,11 @@
 const express = require('express');
 const quizReport = express.Router();
 const quizscoreController = require("../controllers/quizscoreController");
+const authenticate = require('../middlewares/authenticate');
 quizReport.use(express.json());
 
 quizReport.route('/')
-  .get(quizscoreController.getAllQuizScores)//route to get all quiz scores
+  .get(authenticate.verifyUser, authenticate.verifyAdmin, quizscoreController.getAllQuizScores)//route to get all quiz scores
   .post(quizscoreController.createQuizReport);//route to create a quiz scores
 
 /* route to a get avg score for a quiz*/
