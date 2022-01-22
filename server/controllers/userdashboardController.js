@@ -49,19 +49,15 @@ const getUserDashboard = (authenticate.verifyUser, (req, res) => {
         })
 })
 
-const getQuizByUser = (authenticate.verifyUser, (req, res) => {
-    let usertoken = req.headers.authorization;
-    let token = usertoken.split(' ');
-    let decoded = jwt.verify(token[1], process.env.SECRET_KEY);
-    let userid = decoded._id;
-    QuizReports.find({ user: userid })
-        .populate('quizID')
+const getQuizByUser = (req, res) => {
+    QuizReports.find({ quizID: req.params.quizid, user: req.params.userid })
+        .populate('quizID user')
         .then((dash) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(dash);
         })
-})
+}
 
 const getleaderboardByAssessment = (authenticate.verifyUser, (req, res, next) => {
     let usertoken = req.headers.authorization;
@@ -81,6 +77,54 @@ const getleaderboardByAssessment = (authenticate.verifyUser, (req, res, next) =>
         }, (err) => next(err))
         .catch((err) => next(err));
 })
+
+const quizDetails = (req, res, next) => {
+    QuizReports.find({ quizID: req.params.quizid })
+        .populate('user question')
+        .then((lead) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            /* loop for no of users in this quiz */
+            let leaderboard = {};
+            let avgAssessmentScore = 0, countQuizUser, assessmentTestCaseEfficiency;
+            for (let i = 0; i < lead.length; i++) {
+                let currentUser = lead[i].user.username;
+                let currentQuestion = lead[i].question.title;
+                if (!(leaderboard.hasOwnProperty(currentUser))) {
+                    leaderboard[currentUser] = {
+                        "totalScore": lead[i]["score"]
+                    }
+                    leaderboard[currentUser][currentQuestion] = lead[i]["score"];
+                }
+                else {
+                    leaderboard[currentUser][currentQuestion] = lead[i]["score"];
+                    leaderboard[currentUser]["totalScore"] += lead[i]["score"];
+                }
+            }
+            /* For sorting, converting obj to array*/
+            let entries = Object.entries(leaderboard);
+            /* Sorting from high to low*/
+            let sortAvgScore = entries.sort((a, b) => {
+                return b[1].totalScore - a[1].totalScore
+            });
+            countQuizUser = sortAvgScore.length;
+            for (let i = 0; i < sortAvgScore.length; i++) {
+                avgAssessmentScore += sortAvgScore[i][1].totalScore;
+                sortAvgScore[i].push({
+                    "Rank": i + 1
+                })
+            }
+            assessmentTestCaseEfficiency = Math.floor((avgAssessmentScore / (countQuizUser * 300)) * 100);
+            avgAssessmentScore = Math.floor(avgAssessmentScore / countQuizUser);
+            res.json({
+                sortAvgScore,
+                "Total Quiz Participant": countQuizUser,
+                "Average Assessment Score": avgAssessmentScore,
+                "Quiz Test Case Efficiency": `${assessmentTestCaseEfficiency} %`
+            });
+        }, (err) => next(err))
+        .catch((err) => next(err));
+}
 
 const langProficiencyWithTotalCount = (authenticate.verifyUser, async (req, res) => {
     let usertoken = req.headers.authorization;
@@ -139,5 +183,6 @@ module.exports = {
     getUserDashboard,
     getQuizByUser,
     getleaderboardByAssessment,
+    quizDetails,
     langProficiencyWithTotalCount
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const dashboardRouter = express.Router();
 const dashboardController = require('../controllers/userdashboardController');
+const authenticate = require('../middlewares/authenticate');
 dashboardRouter.use(express.json());
 
 dashboardRouter.route('/')
@@ -15,7 +16,9 @@ dashboardRouter.get('/allassessment', dashboardController.getleaderboardByAssess
     route to show count of language proficiency and quiz problem solved
 */
 dashboardRouter.get('/languageandtotalcount', dashboardController.langProficiencyWithTotalCount);
-
-dashboardRouter.get('/quizbyuser', dashboardController.getQuizByUser); // route for all quizzes attempted by a user
+// route to count total attempted user in java quiz for admin
+dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.quizDetails);
+// route for a quizz attempted by a user
+dashboardRouter.get('/quizbyuser/:quizid/:userid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getQuizByUser);
 
 module.exports = dashboardRouter;

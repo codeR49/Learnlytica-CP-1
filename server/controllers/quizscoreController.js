@@ -191,7 +191,7 @@ const getUserAvgScore = (authenticate.verifyUser, (req, res, next) => {
 })
 
 const showjavaleaderboard = (req, res, next) => {
-  QuizReports.find({ quizID: "61d6a02eb1be8bb03c273efc" })
+  QuizReports.find({ quizID: req.params.quizid })
     .populate('user question')
     .then((lead) => {
       res.statusCode = 200;

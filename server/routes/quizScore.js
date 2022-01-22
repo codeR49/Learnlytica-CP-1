@@ -13,7 +13,7 @@ quizReport.route('/getscore')
   .get(quizscoreController.getUserAvgScore)
 
 /* route to show leaderboard for a java quiz*/
-quizReport.route('/javaleaderboard')
+quizReport.route('/javaleaderboard/:quizid')
   .get(quizscoreController.showjavaleaderboard)
 
 module.exports = quizReport;
