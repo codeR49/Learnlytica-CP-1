@@ -19,6 +19,6 @@ dashboardRouter.get('/languageandtotalcount', dashboardController.langProficienc
 // route to count total attempted user in java quiz for admin
 dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.quizDetails);
 // route for a quizz attempted by a user
-dashboardRouter.get('/quizbyuser/:quizid/:userid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getQuizByUser);
+dashboardRouter.get('/quizbyuser', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getQuizByUser);
 
 module.exports = dashboardRouter;

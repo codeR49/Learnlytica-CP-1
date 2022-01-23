@@ -2,6 +2,7 @@ const userDashboard = require('../models/userDashboard');
 const QuizReports = require('../models/quizreport');
 const Reports = require('../models/report');
 const Questions = require('../models/question');
+const Quiz = require('../models/quiz');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middlewares/authenticate');
 
@@ -50,13 +51,22 @@ const getUserDashboard = (authenticate.verifyUser, (req, res) => {
 })
 
 const getQuizByUser = (req, res) => {
-    QuizReports.find({ quizID: req.params.quizid, user: req.params.userid })
-        .populate('quizID user')
+    QuizReports.find({ user: req.query.userid })
+        .populate('user')
         .then((dash) => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json(dash);
-        })
+            //     res.statusCode = 200;
+            //     res.setHeader('Content-Type', 'application/json');
+            // res.json(dash);
+            for (let i = 0; i < dash.length; i++) {
+                Quiz.findById(dash[i].quizID)
+                    .then((quiz) => {
+                        var quizName = quiz.quizName;
+                        dash[i]['quizName'] = quizName;
+                        console.log(dash[i]['quizName'])
+                    })
+
+            }
+        });
 }
 
 const getleaderboardByAssessment = (authenticate.verifyUser, (req, res, next) => {
