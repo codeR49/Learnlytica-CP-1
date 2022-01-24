@@ -51,22 +51,59 @@ const getUserDashboard = (authenticate.verifyUser, (req, res) => {
 })
 
 const getQuizByUser = (req, res) => {
-    QuizReports.find({ user: req.query.userid })
-        .populate('user')
-        .then((dash) => {
-            //     res.statusCode = 200;
-            //     res.setHeader('Content-Type', 'application/json');
-            // res.json(dash);
-            for (let i = 0; i < dash.length; i++) {
-                Quiz.findById(dash[i].quizID)
-                    .then((quiz) => {
-                        var quizName = quiz.quizName;
-                        dash[i]['quizName'] = quizName;
-                        console.log(dash[i]['quizName'])
-                    })
 
+    let  avgTestcasePassed, avgCompileTime, resObj = {}, count = 1;
+    QuizReports.find({ user: req.query.userid })
+        .populate('quizID')
+        .then((dash) => {
+            // let quizid = dash[0].quizID.toString();
+            // console.log(quizid);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            for (let i = 0; i < dash.length; i++) {
+                let quizName = dash[i].quizID.quizName;
+                if (!(resObj.hasOwnProperty(quizName))) {
+                    resObj[quizName] = {
+                        "score": dash[i]["score"]
+                    }
+                    //languageUsed.push(dash[i]["languageUsed"]);
+                    resObj[quizName]["languageUsed"] = dash[i]["languageUsed"];
+                    avgTestcasePassed = Number(dash[i]["testcasePassed"].match(/\d+/)[0]);
+                    resObj[quizName]["avgTestCaseComplexity"] = avgTestcasePassed;
+                    avgCompileTime = Number(dash[i]["compileTime"].match(/\d+/)[0]);
+                    resObj[quizName]["avgCompiletime"] = avgCompileTime;
+                    resObj[quizName]["count"] = count;
+                }
+                else {
+                    resObj[quizName]["score"] += dash[i]["score"];
+
+                    //languageUsed.push(dash[i]["languageUsed"]);
+
+                    resObj[quizName]["languageUsed"] += `,${dash[i]["languageUsed"]}`;
+                    avgTestcasePassed = Number(dash[i]["testcasePassed"].match(/\d+/)[0]);
+                    resObj[quizName]["avgTestCaseComplexity"] += avgTestcasePassed;
+                    avgCompileTime = Number(dash[i]["compileTime"].match(/\d+/)[0]);
+                    resObj[quizName]["avgCompiletime"] += avgCompileTime;
+                    resObj[quizName]["count"] += 1;
+                }
             }
-        });
+            
+            let entries = Object.entries(resObj);
+
+            for (let i = 0; i < entries.length; i++) {
+                let language = Array.from(new Set(entries[i][1]["languageUsed"].split(','))).toString();
+                language = language.split(",");
+                let testCase = Math.floor(entries[i][1]["avgTestCaseComplexity"] / entries[i][1]["count"]);
+                let compileTime = Math.floor(entries[i][1]["avgCompiletime"] / entries[i][1]["count"]);
+                entries[i][1]["avgTestCaseComplexity"] = `${testCase} %`;
+                entries[i][1]["avgCompiletime"] = compileTime;
+                entries[i][1]["languageUsed"] = language;
+                
+            }
+
+            res.json(entries);
+        })
+
 }
 
 const getleaderboardByAssessment = (authenticate.verifyUser, (req, res, next) => {
