@@ -125,7 +125,7 @@ const getleaderboardByAssessment = (authenticate.verifyUser, (req, res, next) =>
         .catch((err) => next(err));
 })
 
-const quizDetails = (req, res, next) => {
+const onequizDetails = (req, res, next) => {
     QuizReports.find({ quizID: req.params.quizid })
         .populate('user question')
         .then((lead) => {
@@ -172,6 +172,106 @@ const quizDetails = (req, res, next) => {
         }, (err) => next(err))
         .catch((err) => next(err));
 }
+
+const getallQuizDetails = (req, res, next) => {
+    QuizReports.find({})
+        .populate('user')
+        .then((lead) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            /* loop for no of users in this quiz */
+            let leaderboard = {}, countQuizUser, avgTestcasePassed,
+             avgAssessmentScore=0, assessmentTestCaseEfficiency=0, count=0;
+            for (let i = 0; i < lead.length; i++) {
+                let currentUser = lead[i].user.username;
+                if (!(leaderboard.hasOwnProperty(currentUser))) {
+                    leaderboard[currentUser] = {
+                        "totalScore": lead[i]["score"] 
+                    }
+                    avgTestcasePassed = Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                    leaderboard[currentUser]["avgTestCaseComplexity"] = avgTestcasePassed;
+                    count += 1;
+                }
+                else {
+                    leaderboard[currentUser]["totalScore"] += lead[i]["score"];
+                    avgTestcasePassed = Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                    leaderboard[currentUser]["avgTestCaseComplexity"] += avgTestcasePassed;
+                    count += 1;
+                }
+            }
+            // /* converting leaderboard obj to array*/
+             let entries = Object.entries(leaderboard);
+            
+             countQuizUser = entries.length;
+             
+            for (let i = 0; i < entries.length; i++) {
+                avgAssessmentScore += entries[i][1].totalScore;
+                assessmentTestCaseEfficiency += entries[i][1].avgTestCaseComplexity
+            }
+             assessmentTestCaseEfficiency = Math.floor(assessmentTestCaseEfficiency / count);
+             avgAssessmentScore = Math.floor(avgAssessmentScore / countQuizUser);
+            
+            res.json({
+                
+                "Total Users": countQuizUser,
+                "Average Assessment Score": `${avgAssessmentScore}/300`,
+                "Average Test Case Efficiency": `${assessmentTestCaseEfficiency} %`
+            });
+            //res.json(leaderboard);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+}
+
+const showallQuizTopper = (req, res, next) => {
+    QuizReports.find({})
+      .populate('quizID user question')
+      .then((lead) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        /* loop for no of users in this quiz */
+        //console.log(lead);
+        let leaderboard = {};
+        for (let i = 0; i < lead.length; i++) {
+          let currentQuiz = lead[i].quizID.quizName
+          let currentUser = lead[i].user.username;
+          let currentQuestion = lead[i].question.title;
+          let currentScore = lead[i].score;
+          let currentTestCase = lead[i].testcasePassed;
+          if (!(leaderboard.hasOwnProperty(currentQuiz))) {
+            // leaderboard[currentUser] = {
+            //     "totalScore": lead[i]["score"]
+            // }
+            leaderboard[currentQuiz] = {
+              currentUser: {currentUser}
+            //   "avgscore": {
+            //       currentScore
+            //   },
+            //   "avgTestCase": {
+            //       currentTestCase
+            //   }
+            }
+            //leaderboard[currentUser][currentQuestion] = lead[i]["score"];
+          }
+        //   else {
+        //     leaderboard[currentQuiz][currentQuestion] = lead[i]["score"];
+        //     leaderboard[currentUser]["totalScore"] += lead[i]["score"];
+        //   }
+        }
+        /* For sorting, converting obj to array*/
+        let entries = Object.entries(leaderboard);
+        /* Sorting from high to low*/
+        let sortAvgScore = entries.sort((a, b) => {
+          return b[1].totalScore - a[1].totalScore
+        })
+        for (let i = 0; i < sortAvgScore.length; i++) {
+          sortAvgScore[i].push({
+            "Rank": i + 1
+          })
+        }
+        res.json(leaderboard);
+      }, (err) => next(err))
+      .catch((err) => next(err));
+  }
 
 const langProficiencyWithTotalCount = (authenticate.verifyUser, async (req, res) => {
     let usertoken = req.headers.authorization;
@@ -229,7 +329,9 @@ module.exports = {
     deleteAllReports,
     getUserDashboard,
     getQuizByUser,
+    getallQuizDetails,
+    showallQuizTopper,
     getleaderboardByAssessment,
-    quizDetails,
+    onequizDetails,
     langProficiencyWithTotalCount
 }
