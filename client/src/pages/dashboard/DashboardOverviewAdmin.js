@@ -99,8 +99,8 @@ export default () => {
             category="Test Case Efficiency"
             title={avgTCE}
             period="3 hours"
-            // percentage={18.2}
-            percentageDisabled={true}
+            percentage={18.2}
+            percentageDisabled={false}
             icon={faChartLine}
             iconColor="shape-secondary"
           />

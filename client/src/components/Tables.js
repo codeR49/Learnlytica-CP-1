@@ -399,6 +399,7 @@ export const Leaderboard = (props) => {
     axios.get(DevelopmentUrl + `/quizresults/javaleaderboard/${props.quizid}`)
       .then(res => {
         setState(res.data);
+        console.log(res.data);
         setSpinner(false);
       })
       .catch(err => console.error(err))
@@ -415,13 +416,13 @@ export const Leaderboard = (props) => {
             <Card.Link href="#" className="text-primary fw-bold">{item[0]}</Card.Link>
           </td>
           <td>
-            <Card.Link href="#" className="text-primary fw-bold">{item[1].Q1}</Card.Link>
+            <Card.Link href="#" className="text-primary fw-bold">{item[1][`Factorial of a Number`]}</Card.Link>
           </td>
           <td>
-            <Card.Link href="#" className="text-primary fw-bold">{item[1].Q2}</Card.Link>
+            <Card.Link href="#" className="text-primary fw-bold">{item[1][`Longest Substring Without Repeating Characters`]}</Card.Link>
           </td>
           <td>
-            <Card.Link href="#" className="text-primary fw-bold">{item[1].Q3}</Card.Link>
+            <Card.Link href="#" className="text-primary fw-bold">{item[1][`Square root of two numbers`]}</Card.Link>
           </td>
           <td>
             <Card.Link href="#" className="text-primary fw-bold">{item[1].totalScore}</Card.Link>
