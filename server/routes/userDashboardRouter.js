@@ -16,9 +16,13 @@ dashboardRouter.get('/allassessment', dashboardController.getleaderboardByAssess
     route to show count of language proficiency and quiz problem solved
 */
 dashboardRouter.get('/languageandtotalcount', dashboardController.langProficiencyWithTotalCount);
+
+dashboardRouter.get('/getallQuiz', dashboardController.getallQuizDetails);
 // route to count total attempted user in java quiz for admin
-dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.quizDetails);
+dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.onequizDetails);
 // route for a quizz attempted by a user
 dashboardRouter.get('/quizbyuser/', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getQuizByUser);
+
+dashboardRouter.get('/quizbyrank/', dashboardController.showallQuizTopper);
 
 module.exports = dashboardRouter;
