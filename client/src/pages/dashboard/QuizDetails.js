@@ -16,6 +16,9 @@ import axios from 'axios';
 
 export default (props) => {
   const [totalOrders, settotalOrders] = useState()
+  const [totalUsers, setTotalUsers] = useState()
+  const [avgScore, setAvgScore] = useState()
+  const [avgTCE, setAvgTCE] = useState()
   const token = localStorage.getItem("token");
   useEffect(() => {
     axios.get(DevelopmentUrl + '/dashboard/languageandtotalcount', {
@@ -30,6 +33,22 @@ export default (props) => {
         settotalOrders(res.data.languageProficiency);
       })
       .catch(err => console.error(err))
+
+      axios.get(DevelopmentUrl + `/dashboard/quizdetails/${props.match.params.quizid}`, {
+        headers: {
+          "Content-Type": "text/plain",
+          "Authorization": `bearer ${token}`
+        }
+      }
+      )
+        .then(res => {
+          console.log(res.data)
+          // settotalOrders(res.data.languageProficiency);
+          setTotalUsers(res.data["Total Quiz Participant"])
+          setAvgScore(res.data["Average Assessment Score"])
+          setAvgTCE(res.data["Quiz Test Case Efficiency"])
+        })
+        .catch(err => console.error(err))
 
   }, [])
   return (
@@ -63,7 +82,7 @@ export default (props) => {
         <Col xs={12} sm={6} xl={4} className="mb-4">
           <CounterWidget
             category="Number of Participants"
-            title="167"
+            title={totalUsers}
             period="3 hours"
             // percentage={18.2}
             percentageDisabled={true}
@@ -75,7 +94,7 @@ export default (props) => {
         <Col xs={12} sm={6} xl={4} className="mb-4">
           <CounterWidget
             category="Average Assessment Score"
-            title="75%"
+            title={avgScore}
             period="Feb 1 - Apr 1"
             percentage={28.4}
             icon={faCashRegister}
@@ -84,9 +103,15 @@ export default (props) => {
         </Col>
 
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CircleChartWidget
-            title="Test case efficiency"
-            data={trafficShares} />
+        <CounterWidget
+            category="Test Case Efficiency"
+            title={avgTCE}
+            period="3 hours"
+            // percentage={18.2}
+            percentageDisabled={true}
+            icon={faChartLine}
+            iconColor="shape-secondary"
+          />
         </Col>
       </Row>
 
