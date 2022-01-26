@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { faCashRegister, faChartLine, faCloudUploadAlt, faPlus, faRocket, faTasks, faUserShield } from '@fortawesome/free-solid-svg-icons';
@@ -7,12 +7,31 @@ import { Col, Row, Button, Dropdown, ButtonGroup, Breadcrumb } from '@themesberg
 
 import { CounterWidget, CircleChartWidget, BarChartWidget, TeamMembersWidget, ProgressTrackWidget, RankingWidget, SalesValueWidget, SalesValueWidgetPhone, AcquisitionWidget, SalesValueWidget2 } from "../../components/Widgets";
 import { Leaderboard, PageVisitsTable } from "../../components/Tables";
-import { trafficShares, totalOrders } from "../../data/charts";
+import { trafficShares } from "../../data/charts";
 import { Routes } from "../../routes";
 import GenericPdfDownloader from "../../components/GenericPdfDownloader";
 import { Link } from 'react-router-dom';
+import DevelopmentUrl from "../../constant";
+import axios from 'axios';
 
 export default (props) => {
+  const [totalOrders, settotalOrders] = useState()
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios.get(DevelopmentUrl + '/dashboard/languageandtotalcount', {
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": `bearer ${token}`
+      }
+    }
+    )
+      .then(res => {
+        console.log(res.data.languageProficiency)
+        settotalOrders(res.data.languageProficiency);
+      })
+      .catch(err => console.error(err))
+
+  }, [])
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -78,7 +97,7 @@ export default (props) => {
               <Row>
                 <Col xs={12} className="mb-4">
                   {/* <PageVisitsTable /> */}
-                  <Leaderboard />
+                  <Leaderboard quizid={props.match.params.quizid} />
                 </Col>
 
                 {/* <Col xs={12} lg={6} className="mb-4">
@@ -96,9 +115,10 @@ export default (props) => {
                 <Col xs={12} className="mb-4">
                   <BarChartWidget
                     title="Submissions in different languages"
-                    value={40}
-                    percentage={18.2}
-                    data={totalOrders} />
+                    // value={40}
+                    // percentage={18.2}
+                    data={totalOrders}
+                    type="quiz" />
                 </Col>
 
                 {/* <Col xs={12} className="px-0 mb-4">

@@ -205,15 +205,15 @@ const langProficiencyWithTotalCount = (authenticate.verifyUser, async (req, res)
         Stored as respective key value pair in objLanguage object
     */
     let proficiencyC = Math.floor((countLanguageC / countQuestions) * 100);
-    objLanguage["C"] = `${proficiencyC} %`;
+    objLanguage["C"] = proficiencyC+3;
     let proficiencyCPlusPlus = Math.floor((countLanguageCPlusPlus / countQuestions) * 100);
-    objLanguage["C++"] = `${proficiencyCPlusPlus} %`;
+    objLanguage["C++"] = proficiencyCPlusPlus+3;
     let proficiencyJava = Math.floor((countLanguageJava / countQuestions) * 100);
-    objLanguage["Java"] = `${proficiencyJava} %`;
+    objLanguage["Java"] = proficiencyJava+3;
     let proficiencyJs = Math.floor((countLanguageJS / countQuestions) * 100);
-    objLanguage["JavaScript"] = `${proficiencyJs} %`;
+    objLanguage["JavaScript"] = proficiencyJs+3+3;
     let proficiencyRuby = Math.floor((countLanguageRUBY / countQuestions) * 100);
-    objLanguage["Ruby"] = `${proficiencyRuby} %`;
+    objLanguage["Ruby"] = proficiencyRuby+3;
     // total count of problems solved in above language and quiz problems
     totalCount = countLanguageC + countLanguageCPlusPlus + countLanguageJava +
         countLanguageJS + countLanguageRUBY + countJavaQuiz;

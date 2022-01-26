@@ -26,7 +26,7 @@ const ValueChange = ({ value, suffix }) => {
     </span> : "--"
   );
 };
-export const AdminUserAssessmentTable = () => {
+export const AdminUserAssessmentTable = (props) => {
   const [state, setState] = useState([])
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -34,32 +34,38 @@ export const AdminUserAssessmentTable = () => {
       headers: {
         "Content-Type": "text/plain",
         "Authorization": `bearer ${token}`
+      },
+    
+      params:{
+        userid: props.id
       }})
       .then(res => {
-        // setState(res.data);
+        setState(res.data);
         console.log(res)
       })
       .catch(err => console.error(err))
 
   }, [])
   const TableRow = (props) => {
-    
+    console.log(props)
     const { pageName, views, returnValue, bounceRate, tca } = props;
     const bounceIcon = bounceRate < 0 ? faArrowDown : faArrowUp;
     const bounceTxtColor = bounceRate < 0 ? "text-danger" : "text-success";
 
     return (
       <tr>
-        <th scope="row">{pageName}</th>
-        <td>{returnValue}</td>
+        <th scope="row">{props[0]}</th>
+        <td>{props[1]["score"]}</td>
         <td>
-          <FontAwesomeIcon icon={bounceIcon} className={`${bounceTxtColor} me-3`} />
-          {Math.abs(bounceRate)}%
+          {/* <FontAwesomeIcon icon={bounceIcon} className={`${bounceTxtColor} me-3`} /> */}
+          {props[1]["avgCompiletime"]}
         </td>
         <td>
-          {tca}
+          {props[1]["avgTestCaseComplexity"]}
         </td>
-        <td>{views}</td>
+        <td>{props[1]["languageUsed"].map(
+          l=>l+' '
+        )}</td>
       </tr>
     );
   };
@@ -81,13 +87,13 @@ export const AdminUserAssessmentTable = () => {
           <tr>
             <th scope="col">Assessment Name</th>
             <th scope="col">Avg. Score</th>
-            <th scope="col">Participation</th>
+            <th scope="col">Avg Compile Time</th>
             <th scope="col">Avg. T.C.E</th>
-            <th scope="col">Assessment Topper</th>
+            <th scope="col">Languages Used</th>
           </tr>
         </thead>
         <tbody>
-          {pageVisits.map(pv => <TableRow key={`page-visit-${pv.id}`} {...pv} />)}
+          {state.map(pv => <TableRow key={`page-visit-${pv.id}`} {...pv} />)}
         </tbody>
       </Table>
     </Card>
@@ -265,30 +271,15 @@ export const PageTrafficTable = (props) => {
 };
 
 export const UsersList = (props) => {
-
-  const [state, setState] = useState([])
-  const [spinner, setSpinner] = useState(false)
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    setSpinner(true);
-    axios.get(DevelopmentUrl + '/users',{
-      headers: {
-        "Content-Type": "text/plain",
-        "Authorization": `bearer ${token}`
-      }})
-      .then(res => {
-        setState(res.data);
-        setSpinner(false);
-      })
-      .catch(err => console.error(err))
-
-  }, [])
-
+  const {state} = props;
+  
   const TableRow = (props) => {
     return (
-      spinner?<Spinner/>:
+      <>
+      
+      {
       state && state
-      .filter(item=>item.admin===false)
+      // .filter(item=>item.admin===false&&item.name!="")
       .map((item, index) => (
         <tr key={item._id}>
           <td>
@@ -304,7 +295,8 @@ export const UsersList = (props) => {
           <td>
             <Button as={Link} to={{ pathname: Routes.UserDetails.basePath + "/" + item._id + "/" + item.name }} variant="secondary" className="m-1">View</Button>
           </td>
-        </tr>))
+        </tr>))}
+        </>
     );
   };
 
@@ -398,13 +390,13 @@ export const QuizList = (props) => {
   );
 };
 
-export const Leaderboard = () => {
+export const Leaderboard = (props) => {
   const [state, setState] = useState([])
   const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
     setSpinner(true);
-    axios.get(DevelopmentUrl + '/quizresults/javaleaderboard')
+    axios.get(DevelopmentUrl + `/quizresults/javaleaderboard/${props.quizid}`)
       .then(res => {
         setState(res.data);
         setSpinner(false);

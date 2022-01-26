@@ -90,7 +90,8 @@ export default () => {
                 <Col xs={12}  className="mb-4">
                 <BarChartWidget
                     title="Language Proficiency"
-                    data={totalOrders} />
+                    data={totalOrders}
+                    type="dashboard" />
                 </Col>
               </Row>
             </Col>

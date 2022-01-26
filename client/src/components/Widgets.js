@@ -127,9 +127,25 @@ export const CircleChartWidget = (props) => {
 };
 
 export const BarChartWidget = (props) => {
-  const { title, percentage, data = [] } = props;
-  const labels = ['C', 'C++', 'C#', 'Java', 'Javascipt', 'Python', 'Ruby'];
-  const series = data.map(d => d.value);
+  const { title, data } = props;
+  let labels=[];
+  let series=[[]];
+  if(props.type === "quiz"){
+  // const { title, data } = props;
+  // console.log(props)
+  
+   labels = [];
+   series = [[]];
+  for(const key in data){
+    labels.push(key)
+    series[0].push(data[key])
+  }
+  console.log(series)}
+  else{
+    // const { title, percentage, data } = props;
+   labels = ['C', 'C++', 'C#', 'Java', 'Javascipt', 'Python', 'Ruby'];
+   series = data.map(d => d.value);
+  }
   return (
     <Card border="light" className="shadow-sm">
       <Card.Body className="d-flex flex-row align-items-center flex-0 border-bottom">
