@@ -16,8 +16,8 @@ dashboardRouter.get('/allassessment', dashboardController.getleaderboardByAssess
     route to show count of language proficiency and quiz problem solved
 */
 dashboardRouter.get('/languageandtotalcount', dashboardController.langProficiencyWithTotalCount);
-
-dashboardRouter.get('/getallQuiz', dashboardController.getallQuizDetails);
+//route to get total participent of all quiz n avg score n avg test case passed
+dashboardRouter.get('/getallQuiz', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getallQuizDetails);
 // route to count total attempted user in java quiz for admin
 dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.onequizDetails);
 // route for a quizz attempted by a user
