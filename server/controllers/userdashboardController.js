@@ -2,7 +2,7 @@ const userDashboard = require('../models/userDashboard');
 const QuizReports = require('../models/quizreport');
 const Reports = require('../models/report');
 const Questions = require('../models/question');
-const Quiz = require('../models/quiz');
+const Users = require('../models/users');
 const jwt = require('jsonwebtoken');
 const authenticate = require('../middlewares/authenticate');
 
@@ -52,7 +52,8 @@ const getUserDashboard = (authenticate.verifyUser, (req, res) => {
 
 const getQuizByUser = (req, res) => {
 
-    let  avgTestcasePassed, avgCompileTime, resObj = {}, count = 1;
+    let avgTestcasePassed, avgCompileTime, resObj = {}, 
+    totalAvgScore = 0, totalTestCase = 0;
     QuizReports.find({ user: req.query.userid })
         .populate('quizID')
         .then((dash) => {
@@ -72,13 +73,13 @@ const getQuizByUser = (req, res) => {
                     resObj[quizName]["avgTestCaseComplexity"] = avgTestcasePassed;
                     avgCompileTime = Number(dash[i]["compileTime"].match(/\d+/)[0]);
                     resObj[quizName]["avgCompiletime"] = avgCompileTime;
-                    resObj[quizName]["count"] = count;
+                    resObj[quizName]["count"] = 1;
+                    
                 }
                 else {
                     resObj[quizName]["score"] += dash[i]["score"];
-
                     //languageUsed.push(dash[i]["languageUsed"]);
-
+                    
                     resObj[quizName]["languageUsed"] += `,${dash[i]["languageUsed"]}`;
                     avgTestcasePassed = Number(dash[i]["testcasePassed"].match(/\d+/)[0]);
                     resObj[quizName]["avgTestCaseComplexity"] += avgTestcasePassed;
@@ -98,9 +99,13 @@ const getQuizByUser = (req, res) => {
                 entries[i][1]["avgTestCaseComplexity"] = `${testCase} %`;
                 entries[i][1]["avgCompiletime"] = compileTime;
                 entries[i][1]["languageUsed"] = language;
-                
+                totalAvgScore += entries[i][1].score;
+                totalTestCase += testCase
+                 
             }
-
+            totalAvgScore = Math.floor(totalAvgScore / entries.length);
+            totalTestCase = Math.floor(totalTestCase/ entries.length);
+            entries.push({"avgScoreinAllQuizTaken": totalAvgScore, "avgTCE": `${totalTestCase}%`})
             res.json(entries);
         })
 
@@ -173,7 +178,8 @@ const onequizDetails = (req, res, next) => {
         .catch((err) => next(err));
 }
 
-const getallQuizDetails = (req, res, next) => {
+const getallQuizDetails = async(req, res, next) => {
+    let countUsers =await Users.countDocuments();
     QuizReports.find({})
         .populate('user')
         .then((lead) => {
@@ -181,12 +187,12 @@ const getallQuizDetails = (req, res, next) => {
             res.setHeader('Content-Type', 'application/json');
             /* loop for no of users in this quiz */
             let leaderboard = {}, countQuizUser, avgTestcasePassed,
-             avgAssessmentScore=0, assessmentTestCaseEfficiency=0, count=0;
+                avgAssessmentScore = 0, assessmentTestCaseEfficiency = 0, count = 0;
             for (let i = 0; i < lead.length; i++) {
                 let currentUser = lead[i].user.username;
                 if (!(leaderboard.hasOwnProperty(currentUser))) {
                     leaderboard[currentUser] = {
-                        "totalScore": lead[i]["score"] 
+                        "totalScore": lead[i]["score"]
                     }
                     avgTestcasePassed = Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
                     leaderboard[currentUser]["avgTestCaseComplexity"] = avgTestcasePassed;
@@ -200,20 +206,20 @@ const getallQuizDetails = (req, res, next) => {
                 }
             }
             // /* converting leaderboard obj to array*/
-             let entries = Object.entries(leaderboard);
-            
-             countQuizUser = entries.length;
-             
+            let entries = Object.entries(leaderboard);
+
+            countQuizUser = entries.length;
+
             for (let i = 0; i < entries.length; i++) {
                 avgAssessmentScore += entries[i][1].totalScore;
                 assessmentTestCaseEfficiency += entries[i][1].avgTestCaseComplexity
             }
-             assessmentTestCaseEfficiency = Math.floor(assessmentTestCaseEfficiency / count);
-             avgAssessmentScore = Math.floor(avgAssessmentScore / countQuizUser);
-            
+            assessmentTestCaseEfficiency = Math.floor(assessmentTestCaseEfficiency / count);
+            avgAssessmentScore = Math.floor(avgAssessmentScore / countQuizUser);
+
             res.json({
-                
-                "Total Users": countQuizUser,
+
+                "Total Users": countUsers,
                 "Average Assessment Score": `${avgAssessmentScore}/300`,
                 "Average Test Case Efficiency": `${assessmentTestCaseEfficiency} %`
             });
@@ -222,56 +228,103 @@ const getallQuizDetails = (req, res, next) => {
         .catch((err) => next(err));
 }
 
-const showallQuizTopper = (req, res, next) => {
+const showallQuizTopper = async (req, res, next) => {
+    let countUsers =await Users.countDocuments();
     QuizReports.find({})
-      .populate('quizID user question')
-      .then((lead) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        /* loop for no of users in this quiz */
-        //console.log(lead);
-        let leaderboard = {};
-        for (let i = 0; i < lead.length; i++) {
-          let currentQuiz = lead[i].quizID.quizName
-          let currentUser = lead[i].user.username;
-          let currentQuestion = lead[i].question.title;
-          let currentScore = lead[i].score;
-          let currentTestCase = lead[i].testcasePassed;
-          if (!(leaderboard.hasOwnProperty(currentQuiz))) {
-            // leaderboard[currentUser] = {
-            //     "totalScore": lead[i]["score"]
-            // }
-            leaderboard[currentQuiz] = {
-              currentUser: {currentUser}
-            //   "avgscore": {
-            //       currentScore
-            //   },
-            //   "avgTestCase": {
-            //       currentTestCase
-            //   }
+        .populate('quizID user question')
+        .then((lead) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+
+            /* loop for no of users in this quiz */
+
+            let javaleaderboard = {}, basicleaderboard = {}, response = [], countJava = 0, countBasic = 0,
+            avgJavaScore = 0, avgBasicScore = 0, avgJavaTestCase = 0, avgBasicTestCase = 0,
+            javaParticipation, basicParticipation ;
+            for (let i = 0; i < lead.length; i++) {
+                let currentQuiz = lead[i].quizID.quizName
+                let currentUser = lead[i].user.name;
+                let currentTestCase = lead[i].testcasePassed;
+                if (currentQuiz === "Java Full Stack Quiz") {
+                    if (!(javaleaderboard.hasOwnProperty(currentUser))) {
+                        javaleaderboard[currentUser] = {
+                            "totalScore": lead[i]["score"],
+                            "quizName": currentQuiz
+                        }
+                        javaleaderboard[currentUser]["avgtestCase"] = Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                       countJava++;
+                    }
+                    else {
+                        javaleaderboard[currentUser]["avgtestCase"] += Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                        javaleaderboard[currentUser]["totalScore"] += lead[i]["score"];
+                        countJava++;
+                    }
+                }
+                else if (currentQuiz === "Basic quiz on Data Structure of String and Array") {
+                    if (!(basicleaderboard.hasOwnProperty(currentUser))) {
+                        basicleaderboard[currentUser] = {
+                            "totalScore": lead[i]["score"],
+                            "quizName": currentQuiz
+                        }
+                        basicleaderboard[currentUser]["avgtestCase"] = Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                        countBasic++
+                    }
+                    else {
+                        basicleaderboard[currentUser]["avgtestCase"] += Number(lead[i]["testcasePassed"].match(/\d+/)[0]);
+                        basicleaderboard[currentUser]["totalScore"] += lead[i]["score"];
+                        countBasic++
+                    }
+                }
             }
-            //leaderboard[currentUser][currentQuestion] = lead[i]["score"];
-          }
-        //   else {
-        //     leaderboard[currentQuiz][currentQuestion] = lead[i]["score"];
-        //     leaderboard[currentUser]["totalScore"] += lead[i]["score"];
-        //   }
-        }
-        /* For sorting, converting obj to array*/
-        let entries = Object.entries(leaderboard);
-        /* Sorting from high to low*/
-        let sortAvgScore = entries.sort((a, b) => {
-          return b[1].totalScore - a[1].totalScore
-        })
-        for (let i = 0; i < sortAvgScore.length; i++) {
-          sortAvgScore[i].push({
-            "Rank": i + 1
-          })
-        }
-        res.json(leaderboard);
-      }, (err) => next(err))
-      .catch((err) => next(err));
-  }
+            /* For sorting, converting obj to array*/
+            let entries1 = Object.entries(javaleaderboard);
+            let entries2 = Object.entries(basicleaderboard);
+            /* Sorting from high to low*/
+            let sortAvgScore1 = entries1.sort((a, b) => {
+                return b[1].totalScore - a[1].totalScore
+            })
+            //console.log(sortAvgScore1);
+            let sortAvgScore2 = entries2.sort((a, b) => {
+                return b[1].totalScore - a[1].totalScore
+            })
+            for (let i = 0; i < sortAvgScore1.length; i++) {
+                javaParticipation = Math.floor((sortAvgScore1.length / countUsers) * 100);
+                avgJavaScore += sortAvgScore1[i][1].totalScore;
+                avgJavaTestCase += sortAvgScore1[i][1].avgtestCase;
+                // sortAvgScore1[i][1].count += sortAvgScore1[i][1];
+               //console.log(sortAvgScore1[i][1].count);
+                // sortAvgScore1[i].push({
+                //     "Rank": i + 1
+                // })
+            }
+            avgJavaScore = Math.floor(avgJavaScore / sortAvgScore1.length);
+            avgJavaTestCase = Math.floor(avgJavaTestCase / countJava);
+            response.push({"name": sortAvgScore1[0][1].quizName,
+                               "avgScore": `${avgJavaScore}/300`,
+                               "participation": `${javaParticipation}%`,
+                               "avgTce": `${avgJavaTestCase}%`,
+                               "topper": sortAvgScore1[0][0]});
+            for (let i = 0; i < sortAvgScore2.length; i++) {
+                basicParticipation = Math.floor((sortAvgScore2.length / countUsers) * 100);
+                avgBasicScore += sortAvgScore2[i][1].totalScore;
+                avgBasicTestCase += sortAvgScore2[i][1].avgtestCase;
+               
+                
+                // sortAvgScore2[i].push({
+                //     "Rank": i + 1
+                // })
+            }
+            avgBasicScore = Math.floor(avgBasicScore / sortAvgScore2.length);
+            avgBasicTestCase = Math.floor(avgBasicTestCase / countBasic);
+            response.push({"name": sortAvgScore2[0][1].quizName,
+                               "avgScore": `${avgBasicScore}/300`,
+                               "participation": `${basicParticipation}%`,
+                               "avgTce": `${avgBasicTestCase}%`,
+                               "topper": sortAvgScore2[0][0]})
+            res.json(response);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+}
 
 const langProficiencyWithTotalCount = (authenticate.verifyUser, async (req, res) => {
     let usertoken = req.headers.authorization;

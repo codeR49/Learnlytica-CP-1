@@ -22,7 +22,7 @@ dashboardRouter.get('/getallQuiz', authenticate.verifyUser, authenticate.verifyA
 dashboardRouter.get('/quizdetails/:quizid', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.onequizDetails);
 // route for a quizz attempted by a user
 dashboardRouter.get('/quizbyuser/', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.getQuizByUser);
-
-dashboardRouter.get('/quizbyrank/', dashboardController.showallQuizTopper);
+//route for individual quiz details with topper
+dashboardRouter.get('/quizbyrank/', authenticate.verifyUser, authenticate.verifyAdmin, dashboardController.showallQuizTopper);
 
 module.exports = dashboardRouter;
