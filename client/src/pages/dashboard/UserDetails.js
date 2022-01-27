@@ -1,5 +1,7 @@
 
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from 'axios';
+import DevelopmentUrl from "../../constant";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCashRegister, faChartLine, faCloudUploadAlt, faPlus, faRocket, faTasks, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Button, Dropdown, ButtonGroup, Breadcrumb } from '@themesberg/react-bootstrap';
@@ -14,6 +16,26 @@ import { Routes } from "../../routes";
 import { Link } from 'react-router-dom';
 
 export default (props) => {
+  const [state, setState] = useState([])
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios.get(DevelopmentUrl + '/dashboard/quizbyuser',{
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": `bearer ${token}`
+      },
+    
+      params:{
+        userid: props.match.params.userid
+      }})
+      .then(res => {
+        console.log(res)
+        setState(res.data[res.data.length-1]);
+        console.log(res)
+      })
+      .catch(err => console.error(err))
+
+  }, [])
   return (
     <div >
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -56,7 +78,7 @@ export default (props) => {
         <Col xs={12} sm={6} xl={4} className="mb-4">
           <CounterWidget
             category="Average Assessment Score"
-            title="75%"
+            title={state["avgScoreinAllQuizTaken"]}
             period="Feb 1 - Apr 1"
             percentage={28.4}
             icon={faCashRegister}
@@ -65,9 +87,14 @@ export default (props) => {
         </Col>
 
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CircleChartWidget
-            title="Test case efficiency"
-            data={trafficShares} />
+        <CounterWidget
+            category="Average Assessment Score"
+            title={state["avgTCE"]}
+            period="Feb 1 - Apr 1"
+            percentage={28.4}
+            icon={faCashRegister}
+            iconColor="shape-tertiary"
+          />
         </Col>
       </Row>
 

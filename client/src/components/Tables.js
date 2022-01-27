@@ -47,15 +47,15 @@ export const AdminUserAssessmentTable = (props) => {
 
   }, [])
   const TableRow = (props) => {
-    console.log(props)
+    console.log(props[0])
     const { pageName, views, returnValue, bounceRate, tca } = props;
     const bounceIcon = bounceRate < 0 ? faArrowDown : faArrowUp;
     const bounceTxtColor = bounceRate < 0 ? "text-danger" : "text-success";
-
+    if(props[1])
     return (
       <tr>
         <th scope="row">{props[0]}</th>
-        <td>{props[1]["score"]}</td>
+        <td>{props["1"]["score"]}</td>
         <td>
           {/* <FontAwesomeIcon icon={bounceIcon} className={`${bounceTxtColor} me-3`} /> */}
           {props[1]["avgCompiletime"]}
@@ -68,6 +68,8 @@ export const AdminUserAssessmentTable = (props) => {
         )}</td>
       </tr>
     );
+    else
+    return <></>;
   };
 
   return (
@@ -100,23 +102,37 @@ export const AdminUserAssessmentTable = (props) => {
   );
 };
 export const PageVisitsTable = () => {
-  const TableRow = (props) => {
-    const { pageName, views, returnValue, bounceRate, tca } = props;
-    const bounceIcon = bounceRate < 0 ? faArrowDown : faArrowUp;
-    const bounceTxtColor = bounceRate < 0 ? "text-danger" : "text-success";
+  const [state, setState] = useState([])
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios.get(DevelopmentUrl + '/dashboard/quizbyrank',{
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": `bearer ${token}`
+      }})
+      .then(res => {
+        setState(res.data);
+      })
+      .catch(err => console.error(err))
 
+  }, [])
+  const TableRow = (props) => {
+    // const { pageName, views, returnValue, bounceRate, tca } = props;
+    const bounceIcon = parseInt(props["participation"]) < 0 ? faArrowDown : faArrowUp;
+    const bounceTxtColor = parseInt(props["participation"]) < 0 ? "text-danger" : "text-success";
+console.log(props);
     return (
       <tr>
-        <th scope="row">{pageName}</th>
-        <td>{returnValue}</td>
+        <th scope="row">{props["name"]}</th>
+        <td>{props["avgScore"]}</td>
         <td>
           <FontAwesomeIcon icon={bounceIcon} className={`${bounceTxtColor} me-3`} />
-          {Math.abs(bounceRate)}%
+          {props["participation"]}
         </td>
         <td>
-          {tca}
+          {props["avgTce"]}
         </td>
-        <td>{views}</td>
+        <td>{props["topper"]}</td>
       </tr>
     );
   };
@@ -144,7 +160,7 @@ export const PageVisitsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {pageVisits.map(pv => <TableRow key={`page-visit-${pv.id}`} {...pv} />)}
+          {state.map(pv => <TableRow key={`page-visit-${pv.id}`} {...pv} />)}
         </tbody>
       </Table>
     </Card>
