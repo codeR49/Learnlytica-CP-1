@@ -86,7 +86,7 @@ function QuizStartNow(props) {
       <hr></hr>
       <Score totalscore={totalscore} />
       <h4 class="text-center">Live Leaderboard</h4>
-      <Leaderboard />
+      <Leaderboard quizid="61d6a02eb1be8bb03c273efc" />
     </React.StrictMode>
   );
 };

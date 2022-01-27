@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCashRegister, faChartLine, faCloudUploadAlt, faPlus, faRocket, faTasks, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Button, Dropdown, ButtonGroup } from '@themesberg/react-bootstrap';
@@ -7,8 +7,31 @@ import { Col, Row, Button, Dropdown, ButtonGroup } from '@themesberg/react-boots
 import { CounterWidget, CircleChartWidget, BarChartWidget, ProgressTrackWidget, RankingWidget, SalesValueWidget, AcquisitionWidget, ScoreWidget } from "../../components/Widgets";
 import { PageVisitsTable } from "../../components/Tables";
 import { trafficShares, totalOrders } from "../../data/charts";
+import DevelopmentUrl from "../../constant";
+import axios from 'axios';
 
 export default () => {
+  const [totalUsers, setTotalUsers] = useState()
+  const [avgScore, setAvgScore] = useState()
+  const [avgTCE, setAvgTCE] = useState()
+  const token = localStorage.getItem("token");
+  useEffect(()=>{
+    axios.get(DevelopmentUrl + '/dashboard/getallQuiz', {
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": `bearer ${token}`
+      }
+    }
+    )
+      .then(res => {
+        console.log(res.data)
+        // settotalOrders(res.data.languageProficiency);
+        setTotalUsers(res.data["Total Users"])
+        setAvgScore(res.data["Average Assessment Score"])
+        setAvgTCE(res.data["Average Test Case Efficiency"])
+      })
+      .catch(err => console.error(err))
+  },[])
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
@@ -52,7 +75,7 @@ export default () => {
         <Col xs={12} sm={6} xl={4} className="mb-4">
           <CounterWidget
             category="Total Users"
-            title="1,989"
+            title={totalUsers}
             period="Feb 1 - Apr 1"
             percentage={18.2}
             icon={faChartLine}
@@ -63,7 +86,7 @@ export default () => {
         <Col xs={12} sm={6} xl={4} className="mb-4">
           <CounterWidget
             category="Average Assessment Score"
-            title="75%"
+            title={avgScore}
             period="Feb 1 - Apr 1"
             percentage={28.4}
             icon={faCashRegister}
@@ -72,9 +95,15 @@ export default () => {
         </Col>
 
         <Col xs={12} sm={6} xl={4} className="mb-4">
-          <CircleChartWidget
-            title="Test case efficiency"
-            data={trafficShares} />
+        <CounterWidget
+            category="Test Case Efficiency"
+            title={avgTCE}
+            period="3 hours"
+            percentage={18.2}
+            percentageDisabled={false}
+            icon={faChartLine}
+            iconColor="shape-secondary"
+          />
         </Col>
       </Row>
 
@@ -90,7 +119,8 @@ export default () => {
                 <Col xs={12}  className="mb-4">
                 <BarChartWidget
                     title="Language Proficiency"
-                    data={totalOrders} />
+                    data={totalOrders}
+                    type="dashboard" />
                 </Col>
               </Row>
             </Col>

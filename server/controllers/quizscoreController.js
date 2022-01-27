@@ -198,7 +198,7 @@ const showjavaleaderboard = (req, res, next) => {
       /* loop for no of users in this quiz */
       let leaderboard = {};
       for (let i = 0; i < lead.length; i++) {
-        let currentUser = lead[i].user.username;
+        let currentUser = lead[i].user.name;
         let currentQuestion = lead[i].question.title;
         if (!(leaderboard.hasOwnProperty(currentUser))) {
           leaderboard[currentUser] = {

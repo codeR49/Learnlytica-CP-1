@@ -77,7 +77,7 @@ export default (props) => {
             <Col xs={12} xl={8} className="mb-4">
               <Row>
                 <Col xs={12} className="mb-4">
-                  <AdminUserAssessmentTable />
+                  <AdminUserAssessmentTable id={props.match.params.userid}/>
                 </Col>
 
                 <Col xs={12} lg={6} className="mb-4">
@@ -97,7 +97,8 @@ export default (props) => {
                     title="Language Proficiency"
                     value={40}
                     percentage={18.2}
-                    data={totalOrders} />
+                    data={totalOrders}
+                    type="user" />
                 </Col>
 
                 <Col xs={12} className="px-0 mb-4">
