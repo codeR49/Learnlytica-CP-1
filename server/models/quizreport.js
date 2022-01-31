@@ -37,6 +37,10 @@ const reportQuizSchema = new Schema({
     score: {
         type: Number,
         default: 0
+    },
+    timestamps: {
+        type: Date,
+        default: Date.now()
     }
 }, {
     writeConcern: {
@@ -44,8 +48,6 @@ const reportQuizSchema = new Schema({
         j: true,
         wtimeout: 1000
     }
-}, {
-    timestamps: true
 })
 
 var QuizReport = mongoose.model('Quizreport', reportQuizSchema);

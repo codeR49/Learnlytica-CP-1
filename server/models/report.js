@@ -34,6 +34,10 @@ const reportSchema = new Schema({
     score: {
         type: Number,
         default: 0
+    },
+    timestamps: {
+        type: Date,
+        default: Date.now()
     }
 }, {
     writeConcern: {

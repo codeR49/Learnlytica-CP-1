@@ -26,6 +26,7 @@ var quizRouter = require("./routes/quizRouter");
 var quizReport = require("./routes/quizScore");
 var attemptRouter = require("./routes/attemptRouter");
 var userDashboardRouter = require("./routes/userDashboardRouter");
+var weekMonthRouter = require("./routes/weekmonthRouter");
 
 let app = express();
 
@@ -46,7 +47,7 @@ app.use('/quiz', quizRouter);
 app.use("/quizresults", quizReport);
 app.use("/attempts", attemptRouter);
 app.use("/dashboard", userDashboardRouter);
-
+app.use("/weekmonth", weekMonthRouter);
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
